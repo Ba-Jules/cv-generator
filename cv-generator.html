@@ -1,641 +1,312 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CVCraft Pro — Assistant Carrière Intelligent</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#0f0f0f;--cream:#faf8f3;--gold:#c8972a;--gold-lt:#f0d98a;--teal:#1a6b6b;--teal-lt:#d4eeee;--muted:#6b6860;--border:#e2ded6;--card:#ffffff;--danger:#c0392b;--success:#1a8a5a;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,0.07);--shadow-lg:0 12px 48px rgba(0,0,0,0.12)}
-[data-theme="dark"]{--ink:#e8e8f0;--cream:#13131f;--gold:#f0d98a;--gold-lt:#3d3520;--teal:#2dd4bf;--teal-lt:#1a2a2a;--muted:#9ca3af;--border:#2d2d44;--card:#1e1e35;--shadow:0 4px 24px rgba(0,0,0,0.3);--shadow-lg:0 12px 48px rgba(0,0,0,0.4)}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6;transition:background .3s,color .3s}
-header{background:#0f0f0f;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
-.logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff;letter-spacing:-.5px;cursor:pointer}
-.logo span{color:var(--gold)}
-.header-right{display:flex;align-items:center;gap:12px}
-.header-badge{background:var(--gold);color:#0f0f0f;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
-.theme-toggle{background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;padding:4px;border-radius:6px;transition:.2s}
-.theme-toggle:hover{background:rgba(255,255,255,.1)}
-.progress-bar{background:var(--card);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;gap:0;overflow-x:auto;transition:background .3s}
-.step-tab{display:flex;align-items:center;gap:8px;padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;color:var(--muted);font-size:.85rem;font-weight:500;transition:all .2s;user-select:none}
-.step-tab:hover{color:var(--ink)}
-.step-tab.active{color:var(--teal);border-bottom-color:var(--teal)}
-.step-tab.done{color:var(--success)}
-.step-num{width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--muted);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
-.step-tab.active .step-num{background:var(--teal);color:#fff}
-.step-tab.done .step-num{background:var(--success);color:#fff}
-main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 5rem;min-height:calc(100vh - 130px)}
-.view{display:none}.view.active{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.panel-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;margin-bottom:.4rem}
-.panel-sub{color:var(--muted);margin-bottom:2rem;font-size:.92rem}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);transition:background .3s,border-color .3s}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
-.tpl-card{border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;position:relative;background:var(--card)}
-.tpl-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.tpl-card.selected{border-color:var(--teal)}
-.tpl-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;background:var(--teal);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
-.tpl-preview{height:140px;display:flex;align-items:stretch;padding:12px;gap:8px;font-size:.6rem}
-.tpl-preview.classic{background:#fff}.tpl-preview.modern{background:#f0f4ff}.tpl-preview.executive{background:#0f2340}.tpl-preview.creative{background:linear-gradient(135deg,#ff6b6b20,#ffd93d20)}.tpl-preview.minimal{background:#fafafa}.tpl-preview.bold{background:#1a1a2e}
-.mini-sidebar{width:30%;border-radius:4px;padding:6px;display:flex;flex-direction:column;gap:4px}
-.mini-main{flex:1;display:flex;flex-direction:column;gap:4px}
-.mini-bar{height:5px;border-radius:2px}.mini-block{height:20px;border-radius:3px}.mini-circle{width:24px;height:24px;border-radius:50%;margin-bottom:4px}
-.tpl-label{padding:10px 14px;border-top:1px solid var(--border);font-size:.82rem;font-weight:600;display:flex;justify-content:space-between;align-items:center;background:var(--card)}
-.tpl-badge{font-size:.68rem;padding:2px 7px;border-radius:10px;background:var(--teal-lt);color:var(--teal);font-weight:600}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--card)}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--teal);background:var(--teal-lt)}
-.upload-icon{font-size:2.5rem;margin-bottom:.5rem}
-.upload-zone h3{font-size:.95rem;font-weight:600;margin-bottom:.3rem}
-.upload-zone p{font-size:.8rem;color:var(--muted)}
-.upload-zone input{display:none}
-label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:var(--ink)}
-input[type="text"],input[type="email"],input[type="tel"],input[type="password"],input[type="url"],textarea,select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.88rem;background:var(--card);color:var(--ink);transition:border-color .15s;outline:none}
-input:focus,textarea:focus,select:focus{border-color:var(--teal)}
-textarea{resize:vertical;min-height:90px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-.form-group{margin-bottom:1rem}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;text-decoration:none}
-.btn-primary{background:var(--teal);color:#fff}
-.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,107,107,.3)}
-.btn-secondary{background:var(--card);color:var(--ink);border:1.5px solid var(--border)}
-.btn-secondary:hover{border-color:var(--teal);color:var(--teal)}
-.btn-gold{background:var(--gold);color:#fff}
-.btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-sm{padding:7px 14px;font-size:.8rem}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-.btn-group{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
-.btn-xl{padding:16px 32px;font-size:1.1rem;border-radius:12px}
-.mode-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
-.mode-tab{padding:10px 18px;cursor:pointer;font-size:.85rem;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
-.mode-tab:hover{color:var(--ink)}
-.mode-tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:600}
-.mode-panel{display:none}.mode-panel.active{display:block}
-.qa-section{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
-.qa-section-header{background:var(--card);padding:12px 16px;font-weight:600;font-size:.88rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;border-bottom:1px solid var(--border)}
-.qa-section-header:hover{opacity:.8}
-.qa-section-body{padding:1.2rem;display:none;background:var(--card)}
-.qa-section-body.open{display:block}
-.ai-config-box{background:linear-gradient(135deg,var(--teal-lt),var(--card));border:1.5px solid var(--teal);border-radius:var(--radius);padding:1.5rem}
-.ai-toggle{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
-.toggle-switch{position:relative;width:44px;height:24px;cursor:pointer}
-.toggle-switch input{display:none}
-.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:12px;transition:.2s}
-.toggle-slider::after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.toggle-switch input:checked+.toggle-slider{background:var(--teal)}
-.toggle-switch input:checked+.toggle-slider::after{transform:translateX(20px)}
-.ai-fields{display:none}.ai-fields.visible{display:block}
-.help-bubble{position:relative;display:inline-block}
-.help-btn{width:22px;height:22px;border-radius:50%;background:var(--gold-lt);border:1.5px solid var(--gold);color:var(--gold);font-size:.72rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
-.help-tooltip{display:none;position:absolute;left:30px;top:-10px;background:#0f0f0f;color:#fff;border-radius:8px;padding:12px 14px;font-size:.78rem;line-height:1.5;width:280px;z-index:50;box-shadow:var(--shadow-lg)}
-.help-bubble:hover .help-tooltip{display:block}
-.provider-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap}
-.provider-row>*{flex:1;min-width:160px}
-.tag-input-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border:1.5px solid var(--border);border-radius:8px;min-height:42px;cursor:text;background:var(--card)}
-.tag-input-wrap:focus-within{border-color:var(--teal)}
-.tag-pill{background:var(--teal-lt);color:var(--teal);border-radius:4px;padding:3px 8px;font-size:.78rem;font-weight:500;display:flex;align-items:center;gap:4px}
-.tag-pill button{background:none;border:none;cursor:pointer;font-size:.9rem;color:var(--teal);padding:0}
-.tag-input{border:none;outline:none;font-family:inherit;font-size:.85rem;min-width:100px;flex:1;background:transparent;color:var(--ink)}
-.file-chip{display:inline-flex;align-items:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal);color:var(--teal);border-radius:6px;padding:5px 10px;font-size:.8rem;font-weight:500;margin:4px 0}
-.file-chip button{background:none;border:none;color:var(--teal);cursor:pointer;font-size:.9rem;padding:0}
-.export-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
-.export-card{border:2px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center;transition:all .2s;cursor:pointer;background:var(--card)}
-.export-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.export-icon{font-size:2.5rem;margin-bottom:.5rem}
-.export-card h3{font-size:1rem;font-weight:700;margin-bottom:.3rem}
-.export-card p{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
-.alert{padding:12px 16px;border-radius:8px;font-size:.85rem;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.alert-info{background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal)}
-.alert-warn{background:#fef3cd;color:#856404;border:1px solid #fde38a}
-.alert-success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
-.nav-footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:12px 2rem;display:flex;justify-content:space-between;align-items:center;z-index:90;box-shadow:0 -4px 16px rgba(0,0,0,.06);transition:background .3s}
-#gen-overlay{display:none;position:fixed;inset:0;background:rgba(15,15,15,.85);z-index:200;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem;color:#fff;font-size:1rem}
-#gen-overlay.visible{display:flex}
-.gen-spinner{width:56px;height:56px;border:5px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-#toast-container{position:fixed;top:80px;right:1.5rem;z-index:300;display:flex;flex-direction:column;gap:8px}
-.toast{background:#0f0f0f;color:#fff;padding:12px 18px;border-radius:10px;font-size:.85rem;box-shadow:var(--shadow-lg);animation:slideIn .3s ease;max-width:320px}
-@keyframes slideIn{from{opacity:0;transform:translateX(30px)}}
-.score-gauge{width:120px;height:120px;position:relative;display:inline-block}
-.score-gauge svg{transform:rotate(-90deg)}
-.score-gauge .value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700}
-.ats-list{list-style:none;padding:0}.ats-list li{font-size:.82rem;padding:4px 0;display:flex;align-items:center;gap:6px}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:250;justify-content:center;align-items:center}
-.modal-overlay.visible{display:flex}
-.modal{background:var(--card);border-radius:16px;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;padding:2rem;box-shadow:var(--shadow-lg);animation:fadeIn .3s}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
-.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)}
-.dashboard-hero{text-align:center;padding:3rem 1rem;background:linear-gradient(135deg,var(--teal-lt),var(--card));border-radius:var(--radius);margin-bottom:2rem}
-.dashboard-hero h1{font-family:'Playfair Display',serif;font-size:2.5rem;margin-bottom:.5rem}
-.dashboard-hero p{color:var(--muted);font-size:1.05rem;margin-bottom:1.5rem}
-.stats-row{display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.5rem;text-align:center;min-width:140px}
-.stat-card .num{font-size:1.8rem;font-weight:700;color:var(--teal)}
-.stat-card .lbl{font-size:.78rem;color:var(--muted)}
-.cv-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-top:1rem}
-.cv-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;transition:all .2s}
-.cv-item:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.cv-item h4{font-size:.95rem;font-weight:600;margin-bottom:.3rem}
-.cv-item .meta{font-size:.78rem;color:var(--muted);margin-bottom:.8rem}
-.cv-item .actions{display:flex;gap:.5rem}
-.divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
-.confetti{position:fixed;top:-10px;z-index:999;pointer-events:none;animation:confettiFall 3s ease-out forwards}
-@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
-@media(max-width:720px){.grid-2,.grid-3,.form-row,.export-grid{grid-template-columns:1fr}.provider-row{flex-direction:column}main{padding:1.2rem 1rem 4rem}.dashboard-hero h1{font-size:1.8rem}}
-@media print{header,.progress-bar,.nav-footer,#toast-container{display:none!important}main{padding:0;max-width:100%}.view{display:none!important}#cv-print-target{display:block!important}}
-#cv-print-target{display:none}
-/* ═══ FEATURES V2 ═══ */
-#recruiter-sim-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:400;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1rem}
-#recruiter-sim-modal.active{display:flex}
-.sim-countdown{font-size:2.8rem;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;text-align:center;font-family:'Playfair Display',serif}
-.sim-phase-msg{color:rgba(255,255,255,.85);font-size:.88rem;text-align:center;min-height:1.5em;transition:opacity .3s}
-.sim-frame-wrap{position:relative;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 0 80px rgba(200,151,42,.3)}
-.sim-frame-inner{transform-origin:top left;position:absolute;top:0;left:0;width:794px;pointer-events:none}
-.sim-lens{position:absolute;border:3px solid var(--gold);border-radius:6px;box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 24px rgba(200,151,42,.9);transition:all .65s cubic-bezier(.4,0,.2,1);z-index:5;pointer-events:none;opacity:0}
-.sim-results-panel{background:var(--card);border-radius:12px;padding:1rem 1.4rem;width:min(580px,90vw);max-height:240px;overflow-y:auto}
-.sim-result-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.83rem;line-height:1.4}
-.sim-result-row:last-child{border:none}
-.sim-close-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 24px;border-radius:20px;cursor:pointer;font-size:.82rem;font-weight:600;transition:.2s}
-.sim-close-btn:hover{background:rgba(255,255,255,.22)}
-.radar-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-top:.5rem}
-.radar-legend-row{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:.3rem}
-.radar-legend-item{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:4px}
-.radar-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.ats-cats{margin-top:.8rem}
-.ats-cat-row{margin-bottom:.75rem}
-.ats-cat-label{font-size:.77rem;font-weight:600;display:flex;justify-content:space-between;margin-bottom:3px;color:var(--ink)}
-.ats-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.ats-fill{height:100%;border-radius:3px;transition:width 1.1s ease}
-.kw-pill-wrap{display:flex;flex-wrap:wrap;gap:3px;margin-top:.5rem}
-.kw-pill{padding:2px 8px;border-radius:10px;font-size:.69rem;font-weight:600}
-.kw-hit{background:#d4edda;color:#155724}
-.kw-miss{background:#fde8e8;color:#721c24}
-.ats-boost-box{background:linear-gradient(135deg,var(--teal-lt),var(--card));border:1px solid var(--teal);border-radius:8px;padding:.8rem;margin-top:.7rem;font-size:.8rem}
-.ats-boost-title{font-weight:700;color:var(--teal);font-size:.82rem;margin-bottom:.4rem}
-.coaching-wrap{margin-top:.3rem}
-.coaching-tip{display:flex;gap:.6rem;align-items:flex-start;padding:.75rem .9rem;border-radius:8px;margin-bottom:.5rem;font-size:.82rem;line-height:1.5}
-.coaching-tip.ok{background:#eaf7ee;border-left:3px solid var(--success)}
-.coaching-tip.warn{background:#fff8e1;border-left:3px solid var(--gold)}
-.coaching-tip.boost{background:#e8f4fd;border-left:3px solid #2196f3}
-.coaching-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
-input.v-ok,textarea.v-ok,select.v-ok{border-color:var(--success)!important}
-input.v-err,textarea.v-err{border-color:var(--danger)!important}
-.v-hint{font-size:.72rem;margin-top:3px;display:none}
-.v-hint.show{display:block}.v-hint.err{color:var(--danger)}.v-hint.ok{color:var(--success)}
-.page-counter-badge{background:rgba(15,15,15,.7);color:#fff;font-size:.74rem;padding:3px 10px;border-radius:10px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCraft Pro - Assistant Carrière Intelligent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fix Bug #1: PDF Export (Adding html2pdf.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --ink: #0f0f0f; --cream: #faf8f3; --gold: #c8972a; --gold-lt: #f0d98a; --teal: #1a6b6b;
+            --teal-lt: #d4eeee; --muted: #6b6860; --border: #e2ded6; --card: #ffffff; --danger: #c0392b;
+            --success: #1a8a5a; --radius: 12px; --shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+        [data-theme="dark"] {
+            --ink: #e8e8f0; --cream: #13131f; --gold: #f0d98a; --gold-lt: #3d3520; --teal: #2dd4bf;
+            --teal-lt: #1a2a2a; --muted: #9ca3af; --border: #2d2d44; --card: #1e1e35;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; transition: background .3s, color .3s; }
+        header { background: #0f0f0f; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #fff; letter-spacing: -.5px; cursor: pointer; }
+        .logo span { color: var(--gold); }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .theme-toggle { background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; padding: 4px; border-radius: 6px; transition: .2s; }
+        .progress-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; gap: 0; overflow-x: auto; }
+        .step-tab { display: flex; align-items: center; gap: 8px; padding: 14px 20px; cursor: pointer; border-bottom: 3px solid transparent; color: var(--muted); font-size: .85rem; font-weight: 500; }
+        .step-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+        .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--border); color: var(--muted); font-size: .72rem; display: flex; align-items: center; justify-content: center; }
+        .step-tab.active .step-num { background: var(--teal); color: #fff; }
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+        .view { display: none; }
+        .view.active { display: block; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+        .tpl-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 10px; cursor: pointer; transition: .2s; position: relative; }
+        .tpl-card.selected { border-color: var(--teal); }
+        .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: .2s; text-decoration: none; }
+        .btn-primary { background: var(--teal); color: #fff; }
+        .btn-secondary { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--card); color: var(--ink); }
+        .nav-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); padding: 12px 2rem; display: flex; justify-content: space-between; align-items: center; }
+        #gen-overlay { display: none; position: fixed; inset: 0; background: rgba(15,15,15,0.8); z-index: 200; justify-content: center; align-items: center; color: #fff; }
+        .score-gauge { width: 120px; height: 120px; position: relative; display: inline-block; }
+        .score-gauge svg { transform: rotate(-90deg); }
+        .score-gauge .value { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; }
+        .toast { position: fixed; top: 80px; right: 1.5rem; background: #333; color: #fff; padding: 12px 20px; border-radius: 8px; z-index: 300; }
+    </style>
 </head>
 <body>
-<header>
-<div class="logo" onclick="showDashboard()">CV<span>Craft</span> Pro</div>
-<div class="header-right">
-<span class="header-badge">v2.0 — IA Intégrée</span>
-<button class="theme-toggle" onclick="toggleTheme()" title="Mode sombre/clair" id="theme-btn">🌙</button>
-</div>
-</header>
-<div class="progress-bar" id="step-tabs" style="display:none">
-<div class="step-tab active" onclick="goStep(1)" id="tab-1"><span class="step-num">1</span> Modèle & IA</div>
-<div class="step-tab" onclick="goStep(2)" id="tab-2"><span class="step-num">2</span> Contenu</div>
-<div class="step-tab" onclick="goStep(3)" id="tab-3"><span class="step-num">3</span> Poste ciblé</div>
-<div class="step-tab" onclick="goStep(4)" id="tab-4"><span class="step-num">4</span> Génération & Export</div>
-</div>
-<main>
-<div class="view active" id="view-dashboard">
-<div class="dashboard-hero"><h1>CV<span style="color:var(--gold)">Craft</span> Pro</h1><p>Assistant Carrière Intelligent — Créez des CV qui décrochent des entretiens</p><button class="btn btn-primary btn-xl" onclick="startNewCV()">✨ Créer un nouveau CV</button></div>
-<div class="stats-row"><div class="stat-card"><div class="num" id="stat-count">0</div><div class="lbl">CV créés</div></div><div class="stat-card"><div class="num" id="stat-best">—</div><div class="lbl">Meilleur score ATS</div></div><div class="stat-card"><div class="num" id="stat-last">—</div><div class="lbl">Dernière activité</div></div></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem"><h3 style="font-size:1rem;font-weight:700">Mes CV sauvegardés</h3><button class="btn btn-secondary btn-sm" onclick="startNewCV()">+ Nouveau</button></div>
-<div class="cv-list" id="cv-list"><div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1"><div style="font-size:3rem;margin-bottom:.5rem">📄</div>Aucun CV sauvegardé. Créez votre premier !</div></div>
-</div>
-<div class="view" id="view-step1">
-<h1 class="panel-title">Modèle & Configuration IA</h1><p class="panel-sub">Choisissez votre design et configurez l'assistance intelligente.</p>
-<div class="alert alert-info">💡 Le modèle définit l'apparence. Le contenu vient à l'étape suivante.</div>
-<h3 style="font-size:.9rem;font-weight:700;margin-bottom:1rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Modèles intégrés</h3>
-<div class="grid-3" id="tpl-grid">
-<div class="tpl-card selected" data-tpl="classic" onclick="selectTpl(this)"><div class="tpl-preview classic"><div class="mini-sidebar" style="background:#e8e0d0"><div class="mini-circle" style="background:#c8972a"></div><div class="mini-bar" style="background:#c8972a;width:80%"></div><div class="mini-bar" style="background:#ccc;width:60%"></div></div><div class="mini-main"><div class="mini-bar" style="background:#0f0f0f;height:8px;width:70%"></div><div class="mini-bar" style="background:#c8972a;height:3px;width:40%"></div><div class="mini-block" style="background:#f0ede5;border-left:3px solid #c8972a"></div><div class="mini-block" style="background:#f0ede5;border-left:3px solid #c8972a"></div></div></div><div class="tpl-label">Classique Doré <span class="tpl-badge">Populaire</span></div></div>
-<div class="tpl-card" data-tpl="modern" onclick="selectTpl(this)"><div class="tpl-preview modern"><div class="mini-main"><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><div class="mini-circle" style="background:#3b6bdb;width:20px;height:20px"></div><div><div class="mini-bar" style="background:#3b6bdb;height:7px;width:60px"></div></div></div><div style="display:flex;gap:6px"><div style="flex:1"><div class="mini-bar" style="background:#3b6bdb;height:4px;width:70%"></div><div class="mini-block" style="background:#e8ecfa"></div></div><div style="width:35%"><div class="mini-bar" style="background:#ddd;height:5px"></div></div></div></div></div><div class="tpl-label">Moderne Bleu <span class="tpl-badge">Tech</span></div></div>
-<div class="tpl-card" data-tpl="executive" onclick="selectTpl(this)"><div class="tpl-preview executive"><div class="mini-sidebar" style="background:rgba(255,255,255,.08)"><div class="mini-circle" style="background:#c8972a"></div><div class="mini-bar" style="background:#c8972a;width:80%"></div></div><div class="mini-main"><div class="mini-bar" style="background:#fff;height:8px;width:70%"></div><div class="mini-block" style="background:rgba(255,255,255,.1)"></div><div class="mini-block" style="background:rgba(255,255,255,.1)"></div></div></div><div class="tpl-label">Executive Sombre <span class="tpl-badge">Prestige</span></div></div>
-<div class="tpl-card" data-tpl="creative" onclick="selectTpl(this)"><div class="tpl-preview creative"><div class="mini-main"><div style="background:#ff6b6b;height:35px;border-radius:4px;margin-bottom:6px;display:flex;align-items:center;padding:0 6px"><div class="mini-circle" style="background:rgba(255,255,255,.9);width:16px;height:16px;margin:0 4px 0 0"></div><div class="mini-bar" style="background:#fff;height:5px;width:50px"></div></div><div style="display:flex;gap:4px"><div style="flex:1"><div class="mini-block" style="background:rgba(255,107,107,.1)"></div></div><div style="flex:1"><div class="mini-block" style="background:rgba(255,217,61,.15)"></div></div></div></div></div><div class="tpl-label">Créatif Vif <span class="tpl-badge">Design</span></div></div>
-<div class="tpl-card" data-tpl="minimal" onclick="selectTpl(this)"><div class="tpl-preview minimal"><div class="mini-main" style="justify-content:flex-start;gap:6px"><div style="border-bottom:1px solid #ddd;padding-bottom:6px"><div class="mini-bar" style="background:#111;height:9px;width:55%"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><div class="mini-bar" style="background:#ccc;height:3px"></div></div><div><div class="mini-bar" style="background:#ccc;height:3px"></div></div></div></div></div><div class="tpl-label">Épuré Minimaliste <span class="tpl-badge">Finance</span></div></div>
-<div class="tpl-card" data-tpl="bold" onclick="selectTpl(this)"><div class="tpl-preview bold"><div class="mini-main"><div style="background:linear-gradient(90deg,#6c63ff,#ec4899);height:45px;border-radius:4px;margin-bottom:6px;display:flex;align-items:center;justify-content:center"><div class="mini-bar" style="background:#fff;height:6px;width:60px"></div></div><div style="display:flex;gap:4px"><div style="flex:1"><div class="mini-block" style="background:rgba(108,99,255,.2);border-top:2px solid #6c63ff"></div></div><div style="flex:1"><div class="mini-block" style="background:rgba(236,72,153,.15);border-top:2px solid #ec4899"></div></div></div></div></div><div class="tpl-label">Bold Gradient <span class="tpl-badge">Startup</span></div></div>
-</div>
-<hr class="divider">
-<h3 style="font-size:.9rem;font-weight:700;margin-bottom:1rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Configuration IA</h3>
-<div class="ai-config-box">
-<div class="ai-toggle"><label class="toggle-switch"><input type="checkbox" id="ai-toggle-check" onchange="toggleAI(this)"><div class="toggle-slider"></div></label><div><div style="font-weight:600;font-size:.95rem">Activer l'assistance IA</div><div style="font-size:.8rem;color:var(--muted)">Reformulation intelligente, optimisation ATS, mise en valeur des compétences</div></div></div>
-<div class="ai-fields" id="ai-fields"><hr class="divider" style="margin:1rem 0">
-<div class="provider-row"><div class="form-group" style="margin:0"><div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><label style="margin:0">Provider IA</label><div class="help-bubble"><button class="help-btn">?</button><div class="help-tooltip"><strong>Comment obtenir une clé API ?</strong><br><br><span id="help-content">Sélectionnez un provider.</span></div></div></div><select id="ai-provider" onchange="updateProviderHelp()"><option value="anthropic">Anthropic (Claude)</option><option value="openai">OpenAI (ChatGPT)</option><option value="mistral">Mistral AI</option><option value="gemini">Google Gemini</option></select></div><div class="form-group" style="margin:0"><label>Modèle</label><select id="ai-model"></select></div></div>
-<div class="form-group" style="margin-top:1rem"><label>Clé API</label><div style="position:relative"><input type="password" id="api-key" placeholder="sk-ant-... / sk-..." style="padding-right:80px"><button onclick="toggleKeyVisibility()" style="position:absolute;right:40px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem">👁️</button><button onclick="clearApiKey()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.9rem;color:var(--danger)">🗑️</button></div><div style="font-size:.75rem;color:var(--muted);margin-top:4px">🔒 Stockée localement uniquement</div></div>
-<div id="provider-instructions" class="alert alert-info" style="margin-top:.5rem"></div>
-<button class="btn btn-secondary btn-sm" onclick="testAPIKey()" style="margin-top:.5rem">🔌 Tester la connexion</button><span id="api-test-result" style="font-size:.8rem;margin-left:8px"></span>
-</div></div>
-<hr class="divider">
-<div class="card" style="margin-top:0"><h3 style="font-size:.92rem;font-weight:700;margin-bottom:.7rem">Options de génération</h3><div class="form-row"><div class="form-group" style="margin:0"><label>Langue du CV</label><select id="cv-lang"><option value="fr">Français</option><option value="en">Anglais</option><option value="bilingual">Bilingue FR/EN</option></select></div><div class="form-group" style="margin:0"><label>Niveau de détail</label><select id="cv-detail"><option value="standard">Standard (1 page)</option><option value="detailed">Détaillé (2 pages)</option><option value="executive">Exécutif (2-3 pages)</option></select></div></div></div>
-</div>
-<div class="view" id="view-step2">
-<h1 class="panel-title">Votre contenu</h1><p class="panel-sub">Choisissez comment fournir vos informations.</p>
-<div class="mode-tabs"><div class="mode-tab active" onclick="switchMode('mode-upload')">📎 CV existant</div><div class="mode-tab" onclick="switchMode('mode-text')">📝 Texte libre</div><div class="mode-tab" onclick="switchMode('mode-qa')">💬 Questionnaire</div></div>
-<div class="mode-panel active" id="mode-upload"><div class="grid-2" style="align-items:start"><div><div class="upload-zone" id="cv-upload-zone" onclick="document.getElementById('cv-file').click()" ondragover="handleDrag(event,'cv-upload-zone')" ondragleave="handleDragLeave(event,'cv-upload-zone')" ondrop="handleDrop(event,'cv-file-name','cv-upload-zone')"><input type="file" id="cv-file" accept=".pdf,.docx,.txt" onchange="handleFileSelect(this,'cv-file-name','cv-upload-zone')"><div class="upload-icon">📄</div><h3>Importer votre CV</h3><p>PDF, DOCX, TXT</p></div><div id="cv-file-name" style="margin-top:.5rem"></div></div><div class="card"><h4 style="font-weight:700;font-size:.9rem;margin-bottom:.8rem">🆕 Mises à jour</h4><div class="form-group"><label>Nouvelles expériences</label><textarea id="new-experience" placeholder="Ex: Chef de projet IT chez X depuis 2025"></textarea></div><div class="form-group"><label>Nouvelles formations</label><textarea id="new-formation" placeholder="Ex: AWS Solutions Architect (2024)"></textarea></div><div class="form-group" style="margin:0"><label>Autres modifications</label><textarea id="new-other" placeholder="Compétences, langues, projets..."></textarea></div></div></div></div>
-<div class="mode-panel" id="mode-text"><div class="alert alert-info">Collez vos informations librement. L'IA structurera automatiquement.</div><div class="form-group"><label>Vos informations</label><textarea id="free-text" style="min-height:280px" placeholder="Nom, contacts, expériences, formations, compétences..."></textarea></div></div>
-<div class="mode-panel" id="mode-qa">
-<div class="alert alert-info">🤖 Plus vous donnez d'infos, plus le CV sera complet.</div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">👤 Identité & Contact <span>▼</span></div><div class="qa-section-body open"><div class="form-row"><div class="form-group" style="margin:0"><label>Prénom</label><input type="text" id="q-prenom" placeholder="Marie"></div><div class="form-group" style="margin:0"><label>Nom</label><input type="text" id="q-nom" placeholder="DUPONT"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Titre</label><input type="text" id="q-titre" placeholder="Responsable IT"></div><div class="form-group" style="margin:0"><label>Email</label><input type="email" id="q-email" placeholder="marie@email.com"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Téléphone</label><input type="tel" id="q-tel" placeholder="+33 6 12 34 56 78"></div><div class="form-group" style="margin:0"><label>Localisation</label><input type="text" id="q-location" placeholder="Paris"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>LinkedIn</label><input type="url" id="q-linkedin" placeholder="linkedin.com/in/..."></div><div class="form-group" style="margin:0"><label>Portfolio</label><input type="url" id="q-site" placeholder="www..."></div></div></div></div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">🎯 Accroche <span>▼</span></div><div class="qa-section-body"><div class="form-group"><label>Résumé professionnel</label><textarea id="q-accroche" placeholder="3-5 lignes de présentation..."></textarea></div><div class="form-group" style="margin:0"><label>Mots-clés</label><div class="tag-input-wrap" id="keywords-wrap" onclick="document.getElementById('kw-input').focus()"><input type="text" class="tag-input" id="kw-input" placeholder="Mot-clé + Entrée..." onkeydown="addTag(event,'keywords-wrap','kw-input')"></div></div></div></div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">💼 Expériences <span>▼</span></div><div class="qa-section-body"><div id="experiences-list"><div class="exp-entry card" style="margin-bottom:1rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem"><strong>Expérience 1</strong><button class="btn btn-secondary btn-sm" onclick="removeEntry(this,'.exp-entry')">✕</button></div><div class="form-row"><div class="form-group" style="margin:0"><label>Poste</label><input type="text" class="q-job-title" placeholder="Chef de projet IT"></div><div class="form-group" style="margin:0"><label>Entreprise</label><input type="text" class="q-company" placeholder="ABC"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Période</label><input type="text" class="q-period" placeholder="Jan. 2022 — Présent"></div><div class="form-group" style="margin:0"><label>Lieu</label><input type="text" class="q-exp-location" placeholder="Paris"></div></div><div class="form-group" style="margin:0"><label>Missions</label><textarea class="q-missions" placeholder="Une mission par ligne..."></textarea></div></div></div><button class="btn btn-secondary" onclick="addExperience()">+ Expérience</button></div></div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">🎓 Formations <span>▼</span></div><div class="qa-section-body"><div id="formations-list"><div class="edu-entry card" style="margin-bottom:1rem"><div class="form-row"><div class="form-group" style="margin:0"><label>Diplôme</label><input type="text" class="q-degree" placeholder="Master Info"></div><div class="form-group" style="margin:0"><label>Établissement</label><input type="text" class="q-school" placeholder="Université..."></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Année</label><input type="text" class="q-edu-year" placeholder="2016"></div><div class="form-group" style="margin:0"><label>Détails</label><input type="text" class="q-edu-detail" placeholder="Mention..."></div></div></div></div><button class="btn btn-secondary" onclick="addFormation()">+ Formation</button></div></div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">🛠️ Compétences & Langues <span>▼</span></div><div class="qa-section-body"><div class="form-group"><label>Compétences techniques</label><div class="tag-input-wrap" id="skills-tech-wrap" onclick="document.getElementById('tech-input').focus()"><input type="text" class="tag-input" id="tech-input" placeholder="Python, AWS..." onkeydown="addTag(event,'skills-tech-wrap','tech-input')"></div></div><div class="form-group"><label>Soft skills</label><div class="tag-input-wrap" id="skills-soft-wrap" onclick="document.getElementById('soft-input').focus()"><input type="text" class="tag-input" id="soft-input" placeholder="Leadership..." onkeydown="addTag(event,'skills-soft-wrap','soft-input')"></div></div><div class="form-group" style="margin:0"><label>Langues</label><div id="langs-list"><div class="form-row"><div><input type="text" class="q-lang" placeholder="Français"></div><div><select class="q-lang-level"><option>Langue maternelle</option><option>Courant (C2)</option><option>Avancé (C1)</option><option>Intermédiaire (B2)</option><option>Débutant (A2)</option></select></div></div></div><button class="btn btn-secondary btn-sm" onclick="addLang()" style="margin-top:.5rem">+ Langue</button></div></div></div>
-<div class="qa-section"><div class="qa-section-header" onclick="toggleQA(this)">⭐ Projets & Loisirs <span>▼</span></div><div class="qa-section-body"><div class="form-group"><label>Projets</label><textarea id="q-projets" placeholder="Projets notables..."></textarea></div><div class="form-group"><label>Loisirs</label><textarea id="q-hobbies" placeholder="Centres d'intérêt..."></textarea></div><div class="form-group" style="margin:0"><label>Infos complémentaires</label><textarea id="q-extra" placeholder="Permis, mobilité..."></textarea></div></div></div>
-</div>
-</div>
-<div class="view" id="view-step3">
-<h1 class="panel-title">Fiche de poste ciblée</h1><p class="panel-sub">Optionnel — l'IA adaptera votre CV à ce poste.</p>
-<div class="grid-2" style="align-items:start"><div><h4 style="font-weight:700;font-size:.9rem;margin-bottom:.8rem">📎 Importer</h4><div class="upload-zone" id="job-upload-zone" onclick="document.getElementById('job-file').click()" ondragover="handleDrag(event,'job-upload-zone')" ondragleave="handleDragLeave(event,'job-upload-zone')" ondrop="handleDrop(event,'job-file-name','job-upload-zone')"><input type="file" id="job-file" accept=".pdf,.docx,.txt" onchange="handleFileSelect(this,'job-file-name','job-upload-zone')"><div class="upload-icon">📋</div><h3>Fiche de poste</h3><p>PDF, DOCX, TXT</p></div><div id="job-file-name" style="margin-top:.5rem"></div></div><div><h4 style="font-weight:700;font-size:.9rem;margin-bottom:.8rem">✍️ Ou coller</h4><div class="form-group"><label>Intitulé</label><input type="text" id="job-title" placeholder="Responsable IT"></div><div class="form-group"><label>Entreprise</label><input type="text" id="job-company" placeholder="Société XYZ"></div><div class="form-group" style="margin:0"><label>Description</label><textarea id="job-desc" style="min-height:160px" placeholder="Description du poste..."></textarea></div></div></div>
-<hr class="divider">
-<div class="card"><h4 style="font-weight:700;font-size:.9rem;margin-bottom:.8rem">🎯 Paramètres</h4><div class="form-row"><div class="form-group" style="margin:0"><label>Niveau</label><select id="job-level"><option>Junior (0-3 ans)</option><option>Confirmé (3-7 ans)</option><option selected>Senior (7+ ans)</option><option>Manager</option><option>Directeur</option></select></div><div class="form-group" style="margin:0"><label>Secteur</label><select id="job-sector"><option>IT / Tech</option><option>Finance</option><option>Industrie</option><option>Santé</option><option>Commerce</option><option>Administration</option><option>Autre</option></select></div></div><div class="form-group" style="margin-top:1rem;margin-bottom:0"><label>Compétences prioritaires</label><div class="tag-input-wrap" id="priority-skills-wrap" onclick="document.getElementById('priority-input').focus()"><input type="text" class="tag-input" id="priority-input" placeholder="Compétence + Entrée..." onkeydown="addTag(event,'priority-skills-wrap','priority-input')"></div></div></div>
-</div>
-<div class="view" id="view-step4">
-<h1 class="panel-title">Génération & Export</h1><p class="panel-sub">Générez, analysez et exportez votre CV.</p>
-<div class="grid-2" style="align-items:start;gap:1.5rem">
-<div>
-<div class="card" style="margin-bottom:1rem"><h4 style="font-weight:700;font-size:.88rem;margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)">Récapitulatif</h4><div id="recap-content" style="font-size:.85rem;line-height:2"><span id="r-template">📐 Modèle : <strong>—</strong></span><br><span id="r-ai">🤖 IA : <strong>—</strong></span><br><span id="r-content">📝 Contenu : <strong>—</strong></span><br><span id="r-job">🎯 Poste : <strong>—</strong></span></div></div>
-<button class="btn btn-primary" onclick="generateCV()" style="width:100%;justify-content:center;padding:14px;font-size:1rem" id="gen-btn">✨ Générer mon CV</button>
-<p style="font-size:.78rem;color:var(--muted);text-align:center;margin-top:.5rem">Ctrl+G pour générer</p>
-<div id="scores-panel" style="display:none;margin-top:1rem">
-<div class="card" style="margin-bottom:1rem"><h4 style="font-weight:700;font-size:.88rem;margin-bottom:1rem;text-transform:uppercase;color:var(--muted)">Qualité du CV</h4><div style="display:flex;align-items:center;gap:1.5rem"><div class="score-gauge"><svg width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="8"/><circle id="quality-arc" cx="60" cy="60" r="52" fill="none" stroke="var(--success)" stroke-width="8" stroke-dasharray="0 327" stroke-linecap="round"/></svg><div class="value" id="quality-value">0</div></div><div id="quality-details" style="flex:1;font-size:.82rem"></div></div></div>
-<div class="card" id="ats-card" style="display:none;margin-bottom:1rem"><h4 style="font-weight:700;font-size:.88rem;margin-bottom:1rem;text-transform:uppercase;color:var(--muted)">Score ATS</h4><div style="display:flex;align-items:center;gap:1.5rem"><div class="score-gauge"><svg width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="8"/><circle id="ats-arc" cx="60" cy="60" r="52" fill="none" stroke="var(--teal)" stroke-width="8" stroke-dasharray="0 327" stroke-linecap="round"/></svg><div class="value" id="ats-value">0</div></div><div id="ats-details" style="flex:1;font-size:.82rem"></div></div></div>
-</div>
-<div class="card" id="radar-card" style="display:none;margin-bottom:1rem">
-<h4 style="font-weight:700;font-size:.88rem;margin-bottom:.5rem;text-transform:uppercase;color:var(--muted)">Profil de Compétences</h4>
-<div class="radar-wrap">
-<svg id="radar-svg" width="200" height="200" viewBox="0 0 200 200"></svg>
-<div class="radar-legend-row" id="radar-legend"></div>
-</div>
-</div>
-<div class="card" id="coaching-card" style="display:none;margin-bottom:1rem">
-<h4 style="font-weight:700;font-size:.88rem;margin-bottom:.5rem;text-transform:uppercase;color:var(--muted)">🎯 Coaching Carrière</h4>
-<div class="coaching-wrap" id="coaching-tips"></div>
-</div>
-</div>
-<div id="post-gen-actions" style="display:none;margin-top:1rem"><div style="display:flex;flex-direction:column;gap:.5rem;width:100%"><button class="btn btn-gold" onclick="generateCoverLetter()" style="width:100%;justify-content:center">✉️ Lettre de motivation</button><button class="btn btn-secondary" onclick="saveCV()" style="width:100%;justify-content:center">💾 Sauvegarder</button><button class="btn btn-secondary" onclick="launchRecruiterSim()" style="width:100%;justify-content:center;border-color:var(--gold);color:var(--gold);font-weight:700">⏱️ Simulation Recruteur 6s</button></div></div>
-</div>
-<div>
-<div class="card" style="padding:0;overflow:hidden"><div style="background:var(--card);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center"><span style="flex:1;font-size:.82rem;color:var(--muted)">Aperçu — <strong id="preview-tpl-name">—</strong></span><span id="page-counter-badge" style="display:none" class="page-counter-badge">📄 1 page</span></div><div id="cv-preview-area" style="min-height:400px;display:flex;align-items:center;justify-content:center;background:var(--cream);color:var(--muted);font-size:.85rem;overflow:auto;max-height:700px"><div style="text-align:center"><div style="font-size:3rem;margin-bottom:.5rem">📄</div>Votre CV apparaîtra ici</div></div></div>
-<div id="export-section" style="display:none;margin-top:1rem"><h4 style="font-weight:700;font-size:.88rem;margin-bottom:.8rem">Exporter</h4><div class="export-grid"><div class="export-card" onclick="exportPDF()"><div class="export-icon">📄</div><h3>PDF</h3><p>Universel</p><button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Télécharger</button></div><div class="export-card" onclick="exportWord()"><div class="export-icon">📝</div><h3>Word</h3><p>Modifiable</p><button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center">Télécharger</button></div><div class="export-card" onclick="exportJSON()"><div class="export-icon">💾</div><h3>JSON</h3><p>Données</p><button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center">Télécharger</button></div></div><div class="form-row" style="margin-top:1rem"><div class="form-group" style="margin:0"><label>Format</label><select id="paper-format"><option value="A4">A4</option><option value="Letter">Letter</option></select></div><div class="form-group" style="margin:0"><label>Nom du fichier</label><input type="text" id="file-name" value="Mon_CV"></div></div></div>
-</div></div>
-</div>
-</main>
-<div class="nav-footer" id="nav-footer" style="display:none"><button class="btn btn-secondary" id="btn-prev" onclick="prevStep()">← Précédent</button><span style="font-size:.8rem;color:var(--muted)" id="step-indicator">Étape 1 / 4</span><button class="btn btn-primary" id="btn-next" onclick="nextStep()">Suivant →</button></div>
-<div id="recruiter-sim-modal">
-<div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-<div style="color:rgba(255,255,255,.5);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.2rem">⏱ Simulation Recruteur</div>
-<div class="sim-countdown" id="sim-countdown">6.0s</div>
-<div class="sim-phase-msg" id="sim-phase-msg">Initialisation...</div>
-</div>
-<div class="sim-frame-wrap" id="sim-frame-wrap">
-<div class="sim-frame-inner" id="sim-frame-inner"></div>
-<div class="sim-lens" id="sim-lens"></div>
-</div>
-<div id="sim-results-container" style="display:none">
-<div class="sim-results-panel">
-<div style="font-weight:700;font-size:.92rem;margin-bottom:.7rem;color:var(--ink)">📋 Ce que le recruteur a retenu en 6 secondes</div>
-<div id="sim-results-list"></div>
-</div>
-</div>
-<button class="sim-close-btn" onclick="closeRecruiterSim()">✕ Fermer</button>
-</div>
-<div id="gen-overlay"><div class="gen-spinner"></div><div style="font-size:1rem;font-weight:600">Génération en cours...</div><div id="gen-status">Analyse...</div></div>
-<div id="toast-container"></div>
-<div class="modal-overlay" id="cover-letter-modal"><div class="modal"><div class="modal-header"><h3 style="font-family:'Playfair Display',serif">✉️ Lettre de motivation</h3><button class="modal-close" onclick="closeModal('cover-letter-modal')">✕</button></div><div id="cover-letter-content" style="white-space:pre-wrap;font-size:.9rem;line-height:1.7"></div><div style="margin-top:1.5rem;display:flex;gap:.75rem"><button class="btn btn-primary btn-sm" onclick="copyCoverLetter()">📋 Copier</button><button class="btn btn-secondary btn-sm" onclick="downloadCoverLetter()">⬇️ Télécharger</button></div></div></div>
-<div id="cv-print-target"></div>
-<script>
-const state={currentStep:0,selectedTemplate:'classic',uploadedCVFile:null,uploadedJobFile:null,aiEnabled:false,provider:'anthropic',apiKey:'',contentMode:'mode-upload',generatedHTML:'',generatedData:null,cvName:''};
-const tplNames={classic:'Classique Doré',modern:'Moderne Bleu',executive:'Executive Sombre',creative:'Créatif Vif',minimal:'Épuré Minimaliste',bold:'Bold Gradient'};
-function toggleTheme(){const d=document.documentElement,dark=d.getAttribute('data-theme')==='dark';d.setAttribute('data-theme',dark?'':'dark');document.getElementById('theme-btn').textContent=dark?'🌙':'☀️';localStorage.setItem('cvcraft_theme',dark?'':'dark')}
-(function(){if(localStorage.getItem('cvcraft_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('theme-btn').textContent='☀️'}})();
-function showDashboard(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-dashboard').classList.add('active');document.getElementById('step-tabs').style.display='none';document.getElementById('nav-footer').style.display='none';state.currentStep=0;updateDashboard()}
-function updateDashboard(){const cvs=getSavedCVs();document.getElementById('stat-count').textContent=cvs.length;document.getElementById('stat-best').textContent=cvs.length?Math.max(...cvs.map(c=>c.atsScore||0))+'%':'—';document.getElementById('stat-last').textContent=cvs.length?new Date(cvs[cvs.length-1].date).toLocaleDateString('fr-FR'):'—';const list=document.getElementById('cv-list');if(!cvs.length){list.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1"><div style="font-size:3rem;margin-bottom:.5rem">📄</div>Aucun CV. Créez votre premier !</div>';return}list.innerHTML=cvs.map((c,i)=>`<div class="cv-item"><h4>${c.name||'Sans nom'}</h4><div class="meta">${tplNames[c.template]||'—'} · ${new Date(c.date).toLocaleDateString('fr-FR')}${c.atsScore?' · ATS: '+c.atsScore+'%':''}</div><div class="actions"><button class="btn btn-primary btn-sm" onclick="loadCV(${i})">Ouvrir</button><button class="btn btn-secondary btn-sm" onclick="duplicateCV(${i})">Dupliquer</button><button class="btn btn-sm" style="color:var(--danger)" onclick="deleteCV(${i})">🗑️</button></div></div>`).join('')}
-function getSavedCVs(){try{return JSON.parse(localStorage.getItem('cvcraft_cvs')||'[]')}catch{return[]}}
-function saveCV(){const name=prompt('Nom du CV :',state.cvName||'Mon CV')||'Mon CV';state.cvName=name;const cvs=getSavedCVs();cvs.push({name,template:state.selectedTemplate,date:Date.now(),html:state.generatedHTML,data:state.generatedData,atsScore:parseInt(document.getElementById('ats-value')?.textContent)||0});localStorage.setItem('cvcraft_cvs',JSON.stringify(cvs));toast('💾 CV sauvegardé !')}
-function loadCV(i){const c=getSavedCVs()[i];if(!c)return;state.generatedHTML=c.html;state.selectedTemplate=c.template;state.cvName=c.name;startNewCV();goStep(4);setTimeout(()=>{document.getElementById('cv-preview-area').innerHTML='<div style="max-width:794px;margin:auto;background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.15)">'+c.html+'</div>';document.getElementById('preview-tpl-name').textContent=tplNames[c.template]||'—';document.getElementById('export-section').style.display='block';document.getElementById('post-gen-actions').style.display='block';document.getElementById('scores-panel').style.display='block'},100)}
-function duplicateCV(i){const cvs=getSavedCVs();cvs.push({...cvs[i],name:cvs[i].name+' (copie)',date:Date.now()});localStorage.setItem('cvcraft_cvs',JSON.stringify(cvs));updateDashboard();toast('📋 Dupliqué !')}
-function deleteCV(i){if(!confirm('Supprimer ?'))return;const cvs=getSavedCVs();cvs.splice(i,1);localStorage.setItem('cvcraft_cvs',JSON.stringify(cvs));updateDashboard();toast('🗑️ Supprimé')}
-function startNewCV(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('step-tabs').style.display='flex';document.getElementById('nav-footer').style.display='flex';goStep(1)}
-function goStep(n){state.currentStep=n;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));document.getElementById('view-step'+n).classList.add('active');document.getElementById('tab-'+n).classList.add('active');document.getElementById('btn-prev').disabled=n===1;document.getElementById('btn-next').textContent=n<4?'Suivant →':'🏠 Dashboard';document.getElementById('step-indicator').textContent='Étape '+n+' / 4';if(n===4)updateRecap();for(let i=1;i<n;i++)document.getElementById('tab-'+i).classList.add('done');window.scrollTo({top:0,behavior:'smooth'})}
-function nextStep(){if(state.currentStep>=4){showDashboard();return}let next=state.currentStep+1;if(next===3&&!document.getElementById('job-title').value.trim()&&!document.getElementById('job-desc').value.trim()&&!state.uploadedJobFile)next=4;goStep(next)}
-function prevStep(){if(state.currentStep<=1){showDashboard();return}let prev=state.currentStep-1;if(prev===3&&!document.getElementById('job-title').value.trim()&&!state.uploadedJobFile)prev=2;goStep(prev)}
-function selectTpl(card){document.querySelectorAll('.tpl-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');state.selectedTemplate=card.dataset.tpl;toast('📐 '+tplNames[state.selectedTemplate])}
-function handleDrag(e,z){e.preventDefault();document.getElementById(z).classList.add('dragover')}
-function handleDragLeave(e,z){document.getElementById(z).classList.remove('dragover')}
-function handleDrop(e,n,z){e.preventDefault();document.getElementById(z).classList.remove('dragover');if(e.dataTransfer.files.length){showFileChip(e.dataTransfer.files[0],n);if(z==='cv-upload-zone')state.uploadedCVFile=e.dataTransfer.files[0];if(z==='job-upload-zone')state.uploadedJobFile=e.dataTransfer.files[0]}}
-function handleFileSelect(input,n,z){if(!input.files.length)return;showFileChip(input.files[0],n);if(z==='cv-upload-zone')state.uploadedCVFile=input.files[0];if(z==='job-upload-zone')state.uploadedJobFile=input.files[0]}
-function showFileChip(file,cid){document.getElementById(cid).innerHTML=`<div class="file-chip">📎 ${file.name} <small>(${(file.size/1024).toFixed(0)} Ko)</small> <button onclick="this.parentElement.remove()">✕</button></div>`}
-function toggleAI(cb){state.aiEnabled=cb.checked;document.getElementById('ai-fields').classList.toggle('visible',cb.checked)}
-const providerHelp={anthropic:{url:'https://console.anthropic.com/settings/keys',text:'Créez une clé sur console.anthropic.com'},openai:{url:'https://platform.openai.com/api-keys',text:'Créez une clé sur platform.openai.com'},mistral:{url:'https://console.mistral.ai/api-keys',text:'Créez une clé sur console.mistral.ai'},gemini:{url:'https://aistudio.google.com/app/apikey',text:'Créez une clé sur aistudio.google.com'}};
-const modelsByProvider={anthropic:[{v:'claude-sonnet-4-20250514',l:'Claude Sonnet 4'},{v:'claude-opus-4-20250514',l:'Claude Opus 4'},{v:'claude-haiku-4-5-20251001',l:'Claude Haiku 4.5'}],openai:[{v:'gpt-4o',l:'GPT-4o'},{v:'gpt-4-turbo',l:'GPT-4 Turbo'}],mistral:[{v:'mistral-large-latest',l:'Mistral Large'},{v:'mistral-small-latest',l:'Mistral Small'}],gemini:[{v:'gemini-2.0-flash',l:'Gemini 2.0 Flash'},{v:'gemini-1.5-pro',l:'Gemini 1.5 Pro'}]};
-function updateProviderHelp(){const p=document.getElementById('ai-provider').value;state.provider=p;const h=providerHelp[p];document.getElementById('provider-instructions').innerHTML=`🔑 <a href="${h.url}" target="_blank" style="color:var(--teal);font-weight:600">${h.url}</a><br>${h.text}`;document.getElementById('ai-model').innerHTML=modelsByProvider[p].map(m=>`<option value="${m.v}">${m.l}</option>`).join('')}
-updateProviderHelp();
-function toggleKeyVisibility(){const f=document.getElementById('api-key');f.type=f.type==='password'?'text':'password'}
-function clearApiKey(){document.getElementById('api-key').value='';localStorage.removeItem('cvcraft_apikey');toast('🗑️ Clé supprimée')}
-async function testAPIKey(){const key=document.getElementById('api-key').value.trim(),res=document.getElementById('api-test-result');if(!key){res.textContent='⚠️ Saisissez une clé';res.style.color='orange';return}res.textContent='⏳ Test...';try{const p=state.provider;let ok=false;if(p==='anthropic'){const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:10,messages:[{role:'user',content:'Hi'}]})});ok=r.status===200}else if(p==='openai'){ok=(await fetch('https://api.openai.com/v1/models',{headers:{'Authorization':'Bearer '+key}})).ok}else if(p==='gemini'){ok=(await fetch('https://generativelanguage.googleapis.com/v1beta/models?key='+key)).ok}else if(p==='mistral'){ok=(await fetch('https://api.mistral.ai/v1/models',{headers:{'Authorization':'Bearer '+key}})).ok}res.textContent=ok?'✅ OK':'❌ Invalide';res.style.color=ok?'var(--success)':'var(--danger)';if(ok)state.apiKey=key}catch(e){res.textContent='❌ Erreur';res.style.color='var(--danger)'}}
-function switchMode(m){document.querySelectorAll('.mode-tab').forEach((t,i)=>t.classList.toggle('active',['mode-upload','mode-text','mode-qa'][i]===m));document.querySelectorAll('.mode-panel').forEach(p=>p.classList.toggle('active',p.id===m));state.contentMode=m}
-function toggleQA(h){const b=h.nextElementSibling,o=b.classList.contains('open');b.classList.toggle('open',!o);h.querySelector('span').textContent=o?'▼':'▲';b.style.display=o?'none':'block'}
-document.querySelectorAll('.qa-section-body').forEach(b=>{if(!b.classList.contains('open'))b.style.display='none'});
-let expCount=1;
-function addExperience(){expCount++;const d=document.createElement('div');d.className='exp-entry card';d.style.marginBottom='1rem';d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem"><strong>Expérience ${expCount}</strong><button class="btn btn-secondary btn-sm" onclick="removeEntry(this,'.exp-entry')">✕</button></div><div class="form-row"><div class="form-group" style="margin:0"><label>Poste</label><input type="text" class="q-job-title"></div><div class="form-group" style="margin:0"><label>Entreprise</label><input type="text" class="q-company"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Période</label><input type="text" class="q-period"></div><div class="form-group" style="margin:0"><label>Lieu</label><input type="text" class="q-exp-location"></div></div><div class="form-group" style="margin:0"><label>Missions</label><textarea class="q-missions"></textarea></div>`;document.getElementById('experiences-list').appendChild(d)}
-function addFormation(){const d=document.createElement('div');d.className='edu-entry card';d.style.marginBottom='1rem';d.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:.5rem"><button class="btn btn-secondary btn-sm" onclick="removeEntry(this,'.edu-entry')">✕</button></div><div class="form-row"><div class="form-group" style="margin:0"><label>Diplôme</label><input type="text" class="q-degree"></div><div class="form-group" style="margin:0"><label>Établissement</label><input type="text" class="q-school"></div></div><div class="form-row"><div class="form-group" style="margin:0"><label>Année</label><input type="text" class="q-edu-year"></div><div class="form-group" style="margin:0"><label>Détails</label><input type="text" class="q-edu-detail"></div></div>`;document.getElementById('formations-list').appendChild(d)}
-function addLang(){const d=document.createElement('div');d.className='form-row';d.innerHTML=`<div><input type="text" class="q-lang" placeholder="Langue"></div><div style="display:flex;gap:6px;align-items:center"><select class="q-lang-level" style="flex:1"><option>Langue maternelle</option><option>Courant (C2)</option><option>Avancé (C1)</option><option>Intermédiaire (B2)</option><option>Débutant (A2)</option></select><button class="btn btn-secondary btn-sm" onclick="this.closest('.form-row').remove()">✕</button></div>`;document.getElementById('langs-list').appendChild(d)}
-function removeEntry(btn,sel){btn.closest(sel).remove()}
-function addTag(e,w,i){if(e.key!=='Enter'&&e.key!==',')return;e.preventDefault();const input=document.getElementById(i),v=input.value.trim().replace(/,$/,'');if(!v)return;const p=document.createElement('div');p.className='tag-pill';p.innerHTML=v+' <button onclick="this.parentElement.remove()">✕</button>';document.getElementById(w).insertBefore(p,input);input.value=''}
-function getTagsFromWrap(w){return Array.from(document.querySelectorAll('#'+w+' .tag-pill')).map(p=>p.textContent.replace('✕','').trim())}
-function updateRecap(){document.getElementById('r-template').innerHTML='📐 Modèle : <strong>'+tplNames[state.selectedTemplate]+'</strong>';document.getElementById('r-ai').innerHTML='🤖 IA : <strong>'+(state.aiEnabled?'Activée — '+state.provider:'Désactivée')+'</strong>';document.getElementById('r-content').innerHTML='📝 Contenu : <strong>'+({'mode-upload':'CV importé','mode-text':'Texte libre','mode-qa':'Questionnaire'}[state.contentMode])+'</strong>';document.getElementById('r-job').innerHTML='🎯 Poste : <strong>'+(document.getElementById('job-title').value.trim()||'Non spécifié')+'</strong>';document.getElementById('preview-tpl-name').textContent=tplNames[state.selectedTemplate]}
-function collectData(){const m=state.contentMode,d={template:state.selectedTemplate,lang:document.getElementById('cv-lang').value,detail:document.getElementById('cv-detail').value,jobTitle:document.getElementById('job-title').value.trim(),jobCompany:document.getElementById('job-company').value.trim(),jobDesc:document.getElementById('job-desc').value.trim(),jobLevel:document.getElementById('job-level').value,jobSector:document.getElementById('job-sector').value,prioritySkills:getTagsFromWrap('priority-skills-wrap')};if(m==='mode-qa'){d.prenom=document.getElementById('q-prenom').value.trim();d.nom=document.getElementById('q-nom').value.trim();d.titre=document.getElementById('q-titre').value.trim();d.email=document.getElementById('q-email').value.trim();d.tel=document.getElementById('q-tel').value.trim();d.location=document.getElementById('q-location').value.trim();d.linkedin=document.getElementById('q-linkedin').value.trim();d.site=document.getElementById('q-site').value.trim();d.accroche=document.getElementById('q-accroche').value.trim();d.keywords=getTagsFromWrap('keywords-wrap');d.skillsTech=getTagsFromWrap('skills-tech-wrap');d.skillsSoft=getTagsFromWrap('skills-soft-wrap');d.projets=document.getElementById('q-projets').value.trim();d.hobbies=document.getElementById('q-hobbies').value.trim();d.extra=document.getElementById('q-extra').value.trim();d.experiences=Array.from(document.querySelectorAll('.exp-entry')).map(e=>({title:e.querySelector('.q-job-title')?.value||'',company:e.querySelector('.q-company')?.value||'',period:e.querySelector('.q-period')?.value||'',location:e.querySelector('.q-exp-location')?.value||'',missions:e.querySelector('.q-missions')?.value||''}));d.formations=Array.from(document.querySelectorAll('.edu-entry')).map(e=>({degree:e.querySelector('.q-degree')?.value||'',school:e.querySelector('.q-school')?.value||'',year:e.querySelector('.q-edu-year')?.value||'',detail:e.querySelector('.q-edu-detail')?.value||''}));d.langues=Array.from(document.querySelectorAll('.form-row:has(.q-lang)')).map(r=>({lang:r.querySelector('.q-lang')?.value||'',level:r.querySelector('.q-lang-level')?.value||''})).filter(l=>l.lang)}else if(m==='mode-text'){d.freeText=document.getElementById('free-text').value.trim()}else{d.newExp=document.getElementById('new-experience').value.trim();d.newForm=document.getElementById('new-formation').value.trim();d.newOther=document.getElementById('new-other').value.trim()}return d}
-async function generateCV(){const data=collectData();state.apiKey=document.getElementById('api-key')?.value?.trim()||'';state.generatedData=data;showOverlay('Préparation...');try{const html=state.aiEnabled&&state.apiKey?await generateWithAI(data):generateManual(data);state.generatedHTML=html;document.getElementById('cv-preview-area').innerHTML='<div style="max-width:794px;margin:auto;background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.15)">'+html+'</div>';document.getElementById('export-section').style.display='block';document.getElementById('post-gen-actions').style.display='block';document.getElementById('scores-panel').style.display='block';hideOverlay();computeQualityScore(data);let atsScore=null;if(data.jobDesc||data.jobTitle)atsScore=computeATSScoreV2(data);const radarScores=computeRadarScores(data);drawRadar(radarScores);showCoachingTips(data,atsScore);setTimeout(updatePageCounter,600);toast('✅ CV généré !');spawnConfetti()}catch(err){hideOverlay();toast('❌ '+err.message)}}
-async function generateWithAI(data){updateOverlayStatus('Envoi à l\'IA...');const prompt=buildPrompt(data),p=state.provider,model=document.getElementById('ai-model').value;let response;if(p==='anthropic'){const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':state.apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model,max_tokens:8192,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw new Error('Erreur Anthropic ('+r.status+')');response=(await r.json()).content[0].text}else if(p==='openai'){const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+state.apiKey,'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:8192,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw new Error('Erreur OpenAI ('+r.status+')');response=(await r.json()).choices[0].message.content}else if(p==='mistral'){const r=await fetch('https://api.mistral.ai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+state.apiKey,'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:8192,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw new Error('Erreur Mistral ('+r.status+')');response=(await r.json()).choices[0].message.content}else if(p==='gemini'){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:8192}})});if(!r.ok)throw new Error('Erreur Gemini ('+r.status+')');response=(await r.json()).candidates[0].content.parts[0].text}else return generateManual(data);const m=response.match(/```html\n?([\s\S]*?)```/)||response.match(/<div[\s\S]*<\/div>/);return m?(m[1]||m[0]):'<div style="padding:2rem">'+response.replace(/\n/g,'<br>')+'</div>'}
-function buildPrompt(data){const styles={classic:'Sidebar dorée (bg #2c1810), accents or #C8972A',modern:'Deux colonnes, bleu #3B6BDB',executive:'Fond sombre #0F2340, accents dorés',creative:'Sidebar gradient rouge-corail',minimal:'Blanc, typographie épurée',bold:'Header gradient #6c63ff→#ec4899, fond #1a1a2e'};let content='';if(data.freeText)content=data.freeText;else if(data.newExp||data.newForm){content='Mises à jour:\n';if(data.newExp)content+=data.newExp+'\n';if(data.newForm)content+=data.newForm+'\n';if(data.newOther)content+=data.newOther}else{content=`${data.prenom} ${data.nom} — ${data.titre}\n${data.email} | ${data.tel} | ${data.location}\n`;if(data.linkedin)content+=data.linkedin+'\n';if(data.accroche)content+='\n'+data.accroche+'\n';if(data.experiences?.length){content+='\nEXPÉRIENCES:\n';data.experiences.forEach(e=>{if(e.title)content+=`${e.title} @ ${e.company} (${e.period})\n${e.missions}\n`})}if(data.formations?.length){content+='\nFORMATIONS:\n';data.formations.forEach(f=>{if(f.degree)content+=`${f.degree} — ${f.school} (${f.year})\n`})}if(data.skillsTech?.length)content+='\nCOMPÉTENCES: '+data.skillsTech.join(', ')+'\n';if(data.skillsSoft?.length)content+='SOFT: '+data.skillsSoft.join(', ')+'\n';if(data.langues?.length)content+='LANGUES: '+data.langues.map(l=>l.lang+' ('+l.level+')').join(', ')+'\n';if(data.projets)content+='\nPROJETS: '+data.projets+'\n';if(data.hobbies)content+='LOISIRS: '+data.hobbies+'\n'}const job=data.jobTitle?`\nPOSTE: ${data.jobTitle}${data.jobCompany?' @ '+data.jobCompany:''}\n${data.jobLevel} | ${data.jobSector}\n${data.jobDesc||''}${data.prioritySkills?.length?'\nPriorité: '+data.prioritySkills.join(', '):''}`:'';return`Expert CV+design. Génère HTML+CSS inline. Style: ${styles[data.template]||'Pro moderne'}. Langue: ${data.lang==='en'?'EN':'FR'}. Format: ${data.detail}, max-width:794px.${job}\n\nCONTENU:\n${content}\n\nRègles: CSS inline uniquement, verbes d'action, n'invente rien, commence par <div...>`}
-function generateManual(data){const c=getTplCSS(data.template||state.selectedTemplate),m=state.contentMode;let name='',titre='',email='',tel='',loc='',linkedin='',accroche='',expH='',formH='',skillsH='',langH='';if(m==='mode-qa'){name=(data.prenom+' '+data.nom).trim()||'Votre Nom';titre=data.titre||'Professionnel';email=data.email;tel=data.tel;loc=data.location;linkedin=data.linkedin;accroche=data.accroche||'';if(data.experiences?.length)expH=data.experiences.filter(e=>e.title).map(e=>`<div style="${c.expBlock}"><div style="${c.expHeader}"><div><div style="${c.jobTitle}">${e.title}</div><div style="${c.company}">${e.company}${e.location?' · '+e.location:''}</div></div><div style="${c.period}">${e.period}</div></div>${e.missions?'<ul style="margin:.5rem 0 0 1.2rem;font-size:.85rem">'+e.missions.split('\n').filter(x=>x.trim()).map(x=>'<li>'+x.trim()+'</li>').join('')+'</ul>':''}</div>`).join('');if(data.formations?.length)formH=data.formations.filter(f=>f.degree).map(f=>`<div style="margin-bottom:.8rem"><div style="${c.jobTitle}">${f.degree}</div><div style="${c.company}">${f.school} · ${f.year}</div></div>`).join('');if(data.skillsTech?.length||data.skillsSoft?.length)skillsH=[...(data.skillsTech||[]),...(data.skillsSoft||[])].map(s=>`<span style="${c.skill}">${s}</span>`).join('');if(data.langues?.length)langH=data.langues.map(l=>`<div style="font-size:.83rem;margin-bottom:3px"><strong>${l.lang}</strong> — ${l.level}</div>`).join('')}else{name='Votre Nom';titre=data.jobTitle||'Professionnel';accroche=data.freeText?data.freeText.substring(0,250)+'...':'Utilisez le mode Q&A ou activez l\'IA.'}return`<div style="${c.container}"><div style="${c.sidebar}"><div style="${c.avatarCircle}">${name.charAt(0)}</div><div style="${c.sidebarName}">${name}</div><div style="${c.sidebarTitre}">${titre}</div><hr style="${c.divider}"><div style="${c.sidebarSect}">CONTACT</div>${email?`<div style="${c.contactItem}">✉ ${email}</div>`:''}${tel?`<div style="${c.contactItem}">📞 ${tel}</div>`:''}${loc?`<div style="${c.contactItem}">📍 ${loc}</div>`:''}${linkedin?`<div style="${c.contactItem}">🔗 ${linkedin}</div>`:''}${skillsH?`<hr style="${c.divider}"><div style="${c.sidebarSect}">COMPÉTENCES</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${skillsH}</div>`:''}${langH?`<hr style="${c.divider}"><div style="${c.sidebarSect}">LANGUES</div><div style="margin-top:8px">${langH}</div>`:''}</div><div style="${c.main}">${accroche?`<section style="${c.section}"><h2 style="${c.sectionTitle}">PROFIL</h2><p style="font-size:.88rem;line-height:1.6">${accroche}</p></section>`:''}${expH?`<section style="${c.section}"><h2 style="${c.sectionTitle}">EXPÉRIENCES</h2>${expH}</section>`:''}${formH?`<section style="${c.section}"><h2 style="${c.sectionTitle}">FORMATIONS</h2>${formH}</section>`:''}${data.projets?`<section style="${c.section}"><h2 style="${c.sectionTitle}">PROJETS</h2><p style="font-size:.85rem">${data.projets}</p></section>`:''}${data.hobbies?`<section style="${c.section}"><h2 style="${c.sectionTitle}">LOISIRS</h2><p style="font-size:.85rem">${data.hobbies}</p></section>`:''}</div></div>`}
-function getTplCSS(t){const T={classic:{container:'display:flex;max-width:794px;min-height:1000px;font-family:Georgia,serif;background:#fff',sidebar:'width:270px;background:#2c1810;color:#fff;padding:2rem 1.5rem',avatarCircle:'width:70px;height:70px;border-radius:50%;background:#c8972a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin-bottom:1rem',sidebarName:'font-size:1.1rem;font-weight:700;margin-bottom:4px',sidebarTitre:'font-size:.78rem;color:#c8972a;text-transform:uppercase;letter-spacing:1px',divider:'border:none;border-top:1px solid rgba(200,151,42,.4);margin:1rem 0',sidebarSect:'font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8972a;margin-bottom:6px',contactItem:'font-size:.78rem;margin-bottom:6px;color:rgba(255,255,255,.85)',skill:'display:inline-block;background:rgba(200,151,42,.2);color:#f0d98a;border:1px solid rgba(200,151,42,.4);border-radius:4px;padding:2px 8px;font-size:.72rem;margin:2px',main:'flex:1;padding:2rem 1.8rem',section:'margin-bottom:1.8rem',sectionTitle:'font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8972a;border-bottom:2px solid #c8972a;padding-bottom:6px;margin-bottom:1rem',expBlock:'margin-bottom:1.2rem;padding-left:1rem;border-left:3px solid #c8972a',expHeader:'display:flex;justify-content:space-between;align-items:flex-start',jobTitle:'font-weight:700;font-size:.9rem;color:#2c1810',company:'font-size:.82rem;color:#666;margin-top:2px',period:'font-size:.78rem;color:#888'},modern:{container:'display:flex;max-width:794px;min-height:1000px;font-family:Arial,sans-serif;background:#fff',sidebar:'width:250px;background:#f0f4ff;padding:2rem 1.5rem',avatarCircle:'width:70px;height:70px;border-radius:50%;background:#3b6bdb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin-bottom:1rem',sidebarName:'font-size:1.05rem;font-weight:700;color:#1a2a5a;margin-bottom:4px',sidebarTitre:'font-size:.78rem;color:#3b6bdb;text-transform:uppercase',divider:'border:none;border-top:1px solid #c5d3f5;margin:1rem 0',sidebarSect:'font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3b6bdb',contactItem:'font-size:.78rem;margin-bottom:5px;color:#444',skill:'display:inline-block;background:#3b6bdb;color:#fff;border-radius:3px;padding:2px 8px;font-size:.72rem;margin:2px',main:'flex:1;padding:2rem 1.8rem',section:'margin-bottom:1.8rem',sectionTitle:'font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3b6bdb;padding-bottom:6px;margin-bottom:1rem;border-bottom:1px solid #c5d3f5',expBlock:'margin-bottom:1.2rem',expHeader:'display:flex;justify-content:space-between',jobTitle:'font-weight:700;font-size:.9rem;color:#1a2a5a',company:'font-size:.82rem;color:#3b6bdb;margin-top:2px',period:'font-size:.75rem;background:#e8ecfa;color:#3b6bdb;padding:2px 8px;border-radius:4px'},executive:{container:'display:flex;max-width:794px;min-height:1000px;font-family:Georgia,serif;background:#0f2340',sidebar:'width:260px;background:rgba(255,255,255,.05);padding:2rem 1.5rem;border-right:1px solid rgba(200,151,42,.3)',avatarCircle:'width:70px;height:70px;border-radius:50%;background:#c8972a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin-bottom:1rem',sidebarName:'font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px',sidebarTitre:'font-size:.75rem;color:#c8972a;text-transform:uppercase;letter-spacing:1.5px',divider:'border:none;border-top:1px solid rgba(200,151,42,.25);margin:1rem 0',sidebarSect:'font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8972a',contactItem:'font-size:.77rem;color:rgba(255,255,255,.7);margin-bottom:5px',skill:'display:inline-block;border:1px solid rgba(200,151,42,.5);color:#f0d98a;border-radius:3px;padding:2px 7px;font-size:.7rem;margin:2px',main:'flex:1;padding:2rem 1.8rem;color:#e8e4d8',section:'margin-bottom:1.8rem',sectionTitle:'font-size:.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#c8972a;border-bottom:1px solid rgba(200,151,42,.4);padding-bottom:6px;margin-bottom:1rem',expBlock:'margin-bottom:1.2rem;padding-left:1rem;border-left:2px solid rgba(200,151,42,.5)',expHeader:'display:flex;justify-content:space-between',jobTitle:'font-weight:700;font-size:.9rem;color:#fff',company:'font-size:.82rem;color:#c8972a;margin-top:2px',period:'font-size:.75rem;color:rgba(255,255,255,.5)'},creative:{container:'display:flex;max-width:794px;min-height:1000px;font-family:Arial,sans-serif;background:#fff',sidebar:'width:250px;background:linear-gradient(180deg,#ff6b6b,#ff8e53);padding:2rem 1.5rem;color:#fff',avatarCircle:'width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin-bottom:1rem;border:3px solid rgba(255,255,255,.6)',sidebarName:'font-size:1.1rem;font-weight:700;margin-bottom:4px',sidebarTitre:'font-size:.75rem;opacity:.85',divider:'border:none;border-top:1px solid rgba(255,255,255,.3);margin:1rem 0',sidebarSect:'font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.75',contactItem:'font-size:.78rem;margin-bottom:5px;opacity:.9',skill:'display:inline-block;background:rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 10px;font-size:.72rem;margin:2px',main:'flex:1;padding:2rem 1.8rem',section:'margin-bottom:1.8rem',sectionTitle:'font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#ff6b6b;border-bottom:2px solid #ffd93d;padding-bottom:6px;margin-bottom:1rem',expBlock:'margin-bottom:1.2rem;background:#fff5f5;border-radius:6px;padding:.8rem;border-left:3px solid #ff6b6b',expHeader:'display:flex;justify-content:space-between',jobTitle:'font-weight:700;font-size:.9rem;color:#333',company:'font-size:.82rem;color:#ff6b6b;margin-top:2px',period:'font-size:.75rem;background:#ffd93d;color:#333;padding:2px 7px;border-radius:4px'},minimal:{container:'max-width:794px;min-height:1000px;font-family:Helvetica,Arial,sans-serif;background:#fff;padding:3rem',sidebar:'display:none',avatarCircle:'display:none',sidebarName:'font-size:2rem;font-weight:700;color:#111',sidebarTitre:'font-size:.9rem;color:#666;margin-top:4px',divider:'border:none;border-top:1px solid #eee;margin:1.5rem 0',sidebarSect:'font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#333',contactItem:'font-size:.8rem;color:#555;display:inline;margin-right:1.5rem',skill:'display:inline-block;background:#f5f5f5;color:#333;border-radius:3px;padding:3px 9px;font-size:.75rem;margin:2px',main:'',section:'margin-bottom:2rem',sectionTitle:'font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#333;border-bottom:1px solid #eee;padding-bottom:6px;margin-bottom:1rem',expBlock:'margin-bottom:1.2rem',expHeader:'display:flex;justify-content:space-between',jobTitle:'font-weight:700;font-size:.92rem',company:'font-size:.82rem;color:#555',period:'font-size:.78rem;color:#888'},bold:{container:'display:flex;max-width:794px;min-height:1000px;font-family:Arial,sans-serif;background:#1a1a2e;color:#e8e8f0',sidebar:'width:250px;background:rgba(255,255,255,.04);border-right:1px solid rgba(108,99,255,.3);padding:2rem 1.5rem',avatarCircle:'width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#ec4899);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin-bottom:1rem',sidebarName:'font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px',sidebarTitre:'font-size:.75rem;color:#a78bfa',divider:'border:none;border-top:1px solid rgba(108,99,255,.3);margin:1rem 0',sidebarSect:'font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#a78bfa',contactItem:'font-size:.77rem;color:rgba(255,255,255,.65);margin-bottom:5px',skill:'display:inline-block;background:rgba(108,99,255,.2);color:#a78bfa;border:1px solid rgba(108,99,255,.4);border-radius:4px;padding:2px 8px;font-size:.72rem;margin:2px',main:'flex:1;padding:2rem 1.8rem',section:'margin-bottom:1.8rem',sectionTitle:'font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;border-bottom:1px solid rgba(108,99,255,.4);padding-bottom:6px;margin-bottom:1rem',expBlock:'margin-bottom:1.2rem;border-left:3px solid #6c63ff;padding-left:1rem',expHeader:'display:flex;justify-content:space-between',jobTitle:'font-weight:700;font-size:.9rem;color:#fff',company:'font-size:.82rem;color:#6c63ff;margin-top:2px',period:'font-size:.75rem;color:rgba(255,255,255,.4)'}};return T[t]||T.classic}
-function computeQualityScore(data){let s=0,ch=[];const a=(ok,l,p)=>{if(ok){s+=p;ch.push('✅ '+l)}else ch.push('⚠️ '+l)};a(data.prenom||data.freeText||data.newExp,'Informations de base',15);a(data.email||data.freeText,'Email',10);a(data.tel||data.freeText,'Téléphone',5);a(data.experiences?.some(e=>e.title)||data.freeText?.length>100||data.newExp,'Expériences',20);a(data.experiences?.some(e=>e.missions?.length>20)||data.freeText?.length>200,'Missions détaillées',15);a(data.formations?.some(f=>f.degree)||data.freeText?.includes('ormation')||data.newForm,'Formations',10);a(data.skillsTech?.length||data.freeText?.length>50,'Compétences',10);a(data.accroche||data.freeText?.length>100,'Accroche',10);a(data.langues?.length||data.freeText?.includes('angue'),'Langues',5);animateGauge('quality-arc','quality-value',s,s>=70?'var(--success)':s>=40?'var(--gold)':'var(--danger)');document.getElementById('quality-details').innerHTML=ch.join('<br>')}
-function animateGauge(aid,vid,target,color){const arc=document.getElementById(aid),val=document.getElementById(vid);arc.style.stroke=color;const C=2*Math.PI*52;let c=0;const step=()=>{if(c<=target){arc.setAttribute('stroke-dasharray',(c/100*C)+' '+C);val.textContent=c;c++;requestAnimationFrame(step)}};step()}
-async function generateCoverLetter(){if(!state.aiEnabled||!state.apiKey){toast('⚠️ Activez l\'IA');return}showOverlay('Lettre de motivation...');try{const data=state.generatedData||collectData();const prompt=`Génère une lettre de motivation professionnelle en français${data.jobTitle?' pour '+data.jobTitle:''}.\n\nCV:\n${(state.generatedHTML||'').replace(/<[^>]+>/g,' ').substring(0,3000)}\n\n${data.jobDesc?'Poste:\n'+data.jobDesc:''}\n\nFormat lettre formelle, 3-4 paragraphes, texte brut.`;const p=state.provider,model=document.getElementById('ai-model').value;let r;if(p==='anthropic'){r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':state.apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model,max_tokens:2048,messages:[{role:'user',content:prompt}]})});r=(await r.json()).content[0].text}else if(p==='openai'){r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+state.apiKey,'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:2048,messages:[{role:'user',content:prompt}]})});r=(await r.json()).choices[0].message.content}else if(p==='gemini'){r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});r=(await r.json()).candidates[0].content.parts[0].text}else if(p==='mistral'){r=await fetch('https://api.mistral.ai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+state.apiKey,'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:2048,messages:[{role:'user',content:prompt}]})});r=(await r.json()).choices[0].message.content}document.getElementById('cover-letter-content').textContent=r;document.getElementById('cover-letter-modal').classList.add('visible');hideOverlay()}catch(e){hideOverlay();toast('❌ '+e.message)}}
-function copyCoverLetter(){navigator.clipboard.writeText(document.getElementById('cover-letter-content').textContent);toast('📋 Copié !')}
-function downloadCoverLetter(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([document.getElementById('cover-letter-content').textContent]));a.download='Lettre_motivation.txt';a.click()}
-function closeModal(id){document.getElementById(id).classList.remove('visible')}
-function exportPDF(){if(!state.generatedHTML){toast('⚠️ Générez d\'abord');return}const w=window.open('');w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0}@page{size:A4;margin:0}</style></head><body>${state.generatedHTML}</body></html>`);w.document.close();setTimeout(()=>w.print(),800);toast('📄 Impression ouverte')}
-function exportWord(){if(!state.generatedHTML){toast('⚠️ Générez d\'abord');return}const n=document.getElementById('file-name').value||'Mon_CV';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff',`<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="UTF-8"></head><body>${state.generatedHTML}</body></html>`],{type:'application/msword'}));a.download=n+'.doc';a.click();toast('📝 Word téléchargé')}
-function exportJSON(){if(!state.generatedData)return;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state.generatedData,null,2)]));a.download='cv_data.json';a.click();toast('💾 JSON téléchargé')}
-const statusMsgs=['Analyse...','Structuration...','Style graphique...','Optimisation...','Finalisation...'];let sIdx=0,sInt;
-function showOverlay(m){document.getElementById('gen-status').textContent=m;document.getElementById('gen-overlay').classList.add('visible');sIdx=0;sInt=setInterval(()=>{sIdx=(sIdx+1)%statusMsgs.length;document.getElementById('gen-status').textContent=statusMsgs[sIdx]},2000)}
-function updateOverlayStatus(m){document.getElementById('gen-status').textContent=m}
-function hideOverlay(){clearInterval(sInt);document.getElementById('gen-overlay').classList.remove('visible')}
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.getElementById('toast-container').appendChild(t);setTimeout(()=>t.remove(),4000)}
-function spawnConfetti(){const colors=['#c8972a','#1a6b6b','#ff6b6b','#6c63ff','#ec4899','#ffd93d'];for(let i=0;i<25;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.width=c.style.height=Math.random()*8+4+'px';c.style.animationDuration=Math.random()*2+2+'s';c.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),5000)}}
-document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='g'){e.preventDefault();if(state.currentStep===4)generateCV();else if(state.currentStep>0){goStep(4);setTimeout(generateCV,300)}}if(e.key==='Escape')document.querySelectorAll('.modal-overlay.visible').forEach(m=>m.classList.remove('visible'))});
-const savedKey=localStorage.getItem('cvcraft_apikey');if(savedKey)document.getElementById('api-key').value=savedKey;
-document.getElementById('api-key').addEventListener('input',e=>localStorage.setItem('cvcraft_apikey',e.target.value));
-updateProviderHelp();updateDashboard();setupValidation();
-setInterval(()=>{try{localStorage.setItem('cvcraft_autosave',JSON.stringify(collectData()))}catch(e){}},30000);
+    <header>
+        <div class="logo" onclick="showDashboard()">CVCraft <span>Pro</span></div>
+        <div class="header-right">
+            <button id="theme-btn" class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
 
-/* ══ SIMULATION RECRUTEUR ══ */
-let simTimer=null;
-function launchRecruiterSim(){
-  if(!state.generatedHTML){toast('⚠️ Générez d\'abord le CV');return}
-  const modal=document.getElementById('recruiter-sim-modal');
-  const frame=document.getElementById('sim-frame-inner');
-  const lens=document.getElementById('sim-lens');
-  const wrap=document.getElementById('sim-frame-wrap');
-  frame.innerHTML=state.generatedHTML.replace(/<script[\s\S]*?<\/script>/gi,'');
-  const wrapW=Math.min(740,window.innerWidth*0.92);
-  const scale=wrapW/794;
-  const wrapH=Math.min(440,1000*scale);
-  wrap.style.width=wrapW+'px';
-  wrap.style.height=wrapH+'px';
-  frame.style.transform='scale('+scale+')';
-  modal.classList.add('active');
-  document.getElementById('sim-results-container').style.display='none';
-  lens.style.opacity='1';
-  const phases=[
-    {t:6.0,msg:'👁️ Première impression — l\'œil cherche le nom...',top:2,left:0,w:100,h:18},
-    {t:4.8,msg:'📋 L\'accroche et le titre sont lus...',top:18,left:28,w:70,h:16},
-    {t:3.4,msg:'💼 Scan rapide de l\'expérience récente...',top:32,left:28,w:68,h:30},
-    {t:2.0,msg:'🔧 Repérage des compétences clés...',top:8,left:0,w:30,h:58},
-    {t:0.8,msg:'🎓 Vérification de la formation...',top:62,left:28,w:65,h:18},
-  ];
-  const setLens=(p)=>{
-    lens.style.top=(p.top/100*wrapH)+'px';
-    lens.style.left=(p.left/100*wrapW)+'px';
-    lens.style.width=(p.w/100*wrapW)+'px';
-    lens.style.height=(p.h/100*wrapH)+'px';
-  };
-  setLens(phases[0]);
-  document.getElementById('sim-countdown').textContent='6.0s';
-  document.getElementById('sim-phase-msg').textContent=phases[0].msg;
-  let timeLeft=6.0,phaseIdx=0;
-  clearInterval(simTimer);
-  simTimer=setInterval(()=>{
-    timeLeft=Math.max(0,timeLeft-0.1);
-    document.getElementById('sim-countdown').textContent=timeLeft.toFixed(1)+'s';
-    for(let i=phases.length-1;i>=0;i--){
-      if(timeLeft<=phases[i].t&&i!==phaseIdx){
-        phaseIdx=i;setLens(phases[i]);
-        document.getElementById('sim-phase-msg').textContent=phases[i].msg;
-        break;
-      }
-    }
-    if(timeLeft<=0){
-      clearInterval(simTimer);lens.style.opacity='0';
-      document.getElementById('sim-phase-msg').textContent='✅ Analyse terminée !';
-      setTimeout(showSimResults,600);
-    }
-  },100);
-}
-function showSimResults(){
-  const data=state.generatedData||{};
-  const results=[];
-  const name=(data.prenom&&data.nom)?data.prenom+' '+data.nom:(data.prenom||data.nom||null);
-  if(name)results.push({icon:'✅',text:'<strong>'+name+'</strong> — Nom bien visible et mémorisé'});
-  else results.push({icon:'⚠️',text:'Nom/Prénom peu visible — placez-le en position haute'});
-  if(data.titre)results.push({icon:'✅',text:'Titre perçu : <strong>'+data.titre+'</strong>'});
-  const exp0=(data.experiences||[])[0];
-  if(exp0?.title)results.push({icon:'✅',text:'Expérience actuelle retenue : <strong>'+exp0.title+'</strong>'+(exp0.company?' @ '+exp0.company:'')});
-  else results.push({icon:'⚠️',text:'Aucune expérience récente clairement identifiée'});
-  const skills=[...(data.skillsTech||[]),...(data.skillsSoft||[])];
-  if(skills.length>=3)results.push({icon:'✅',text:'Compétences clés vues : <strong>'+skills.slice(0,3).join(', ')+'</strong>'});
-  else results.push({icon:'⚠️',text:'Compétences insuffisantes pour être repérées rapidement'});
-  const form0=(data.formations||[])[0];
-  if(form0?.degree)results.push({icon:'✅',text:'Formation : <strong>'+form0.degree+'</strong>'+(form0.school?' — '+form0.school:'')});
-  if(!data.accroche)results.push({icon:'⚠️',text:'Accroche manquante — 3 lignes qui font la différence en 6 secondes'});
-  results.push({icon:'⏱️',text:'Durée réelle de lecture initiale d\'un recruteur : <strong>6 à 30 secondes</strong>'});
-  document.getElementById('sim-results-list').innerHTML=results.map(r=>'<div class="sim-result-row"><span style="font-size:1rem;flex-shrink:0">'+r.icon+'</span><span>'+r.text+'</span></div>').join('');
-  document.getElementById('sim-results-container').style.display='block';
-}
-function closeRecruiterSim(){clearInterval(simTimer);document.getElementById('recruiter-sim-modal').classList.remove('active')}
+    <nav id="step-tabs" class="progress-bar" style="display:none">
+        <div class="step-tab" id="tab-1" onclick="goStep(1)"><div class="step-num">1</div> Modèle</div>
+        <div class="step-tab" id="tab-2" onclick="goStep(2)"><div class="step-num">2</div> Contenu</div>
+        <div class="step-tab" id="tab-3" onclick="goStep(3)"><div class="step-num">3</div> Poste</div>
+        <div class="step-tab" id="tab-4" onclick="goStep(4)"><div class="step-num">4</div> Export</div>
+    </nav>
 
-/* ══ RADAR DES COMPÉTENCES ══ */
-function computeRadarScores(data){
-  const techCount=(data.skillsTech||[]).length;
-  const projets=(data.projets||'').length;
-  const expTitles=(data.experiences||[]).map(e=>(e.title||'').toLowerCase()).join(' ');
-  const leaderWords=['chef','manager','directeur','responsable','head','lead','coordinateur','pilote'];
-  const leaderHits=leaderWords.filter(w=>expTitles.includes(w)).length;
-  const softCount=(data.skillsSoft||[]).length;
-  const langCount=(data.langues||[]).length;
-  const accrocheLen=(data.accroche||'').length;
-  const formCount=(data.formations||[]).filter(f=>f.degree).length;
-  const hasHighDegree=(data.formations||[]).some(f=>(f.degree||'').toLowerCase().match(/master|mba|ingénieur|docteur|bac\+5/));
-  const companies=[...new Set((data.experiences||[]).map(e=>e.company).filter(Boolean))];
-  const hasData=!!(data.prenom||data.freeText||data.newExp);
-  const minVal=hasData?15:0;
-  return {
-    Technique:Math.max(minVal,Math.min(100,techCount*12+(projets>20?15:0)+(data.newExp?10:0))),
-    Leadership:Math.max(minVal,Math.min(100,leaderHits*25+(data.experiences?.length||0)*8)),
-    Communication:Math.max(minVal,Math.min(100,(accrocheLen>100?30:accrocheLen>0?15:0)+softCount*10+langCount*15)),
-    Formation:Math.max(minVal,Math.min(100,formCount*28+(hasHighDegree?30:0)+(data.newForm?10:0))),
-    Adaptabilité:Math.max(minVal,Math.min(100,companies.length*18+(langCount>=2?25:0)+(data.hobbies?10:0)))
-  };
-}
-function drawRadar(scores){
-  const card=document.getElementById('radar-card');
-  if(!card)return;
-  card.style.display='block';
-  const svg=document.getElementById('radar-svg');
-  const legend=document.getElementById('radar-legend');
-  const cx=100,cy=100,r=72;
-  const labels=Object.keys(scores);
-  const values=Object.values(scores);
-  const n=labels.length;
-  const colors=['#1a6b6b','#c8972a','#3b6bdb','#ec4899','#1a8a5a'];
-  let html='';
-  [0.25,0.5,0.75,1].forEach(pct=>{
-    html+=`<circle cx="${cx}" cy="${cy}" r="${r*pct}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
-  });
-  labels.forEach((_,i)=>{
-    const angle=(i/n)*2*Math.PI-Math.PI/2;
-    html+=`<line x1="${cx}" y1="${cy}" x2="${(cx+r*Math.cos(angle)).toFixed(1)}" y2="${(cy+r*Math.sin(angle)).toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
-  });
-  const pts=values.map((v,i)=>{
-    const angle=(i/n)*2*Math.PI-Math.PI/2;
-    const rv=r*v/100;
-    return [cx+rv*Math.cos(angle),cy+rv*Math.sin(angle)];
-  });
-  html+=`<polygon points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="rgba(26,107,107,.2)" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round" style="opacity:0;transition:opacity .7s ease"/>`;
-  pts.forEach(([x,y],i)=>{
-    html+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${colors[i]}" stroke="#fff" stroke-width="1.5"/>`;
-  });
-  labels.forEach((l,i)=>{
-    const angle=(i/n)*2*Math.PI-Math.PI/2;
-    const x=cx+(r+18)*Math.cos(angle);
-    const y=cy+(r+18)*Math.sin(angle);
-    const anchor=x<cx-5?'end':x>cx+5?'start':'middle';
-    const dy=y<cy-5?0:y>cy+5?12:5;
-    html+=`<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" dy="${dy}" text-anchor="${anchor}" font-size="9" fill="var(--muted)" font-family="DM Sans,sans-serif" font-weight="600">${l}</text>`;
-  });
-  svg.innerHTML=html;
-  legend.innerHTML=labels.map((l,i)=>`<div class="radar-legend-item"><div class="radar-dot" style="background:${colors[i]}"></div>${l} <strong>${values[i]}%</strong></div>`).join('');
-  requestAnimationFrame(()=>{const poly=svg.querySelector('polygon');if(poly)poly.style.opacity='1';});
-}
+    <main>
+        <div id="view-dashboard" class="view active">
+            <div class="dashboard-hero" style="text-align:center; padding:3rem; background:var(--teal-lt); border-radius:12px; margin-bottom:2rem">
+                <h1>CV Craft Pro</h1>
+                <p>Assistant Intelligent pour vos candidatures</p><br>
+                <button class="btn btn-primary" onclick="startNewCV()">✨ Créer un nouveau CV</button>
+            </div>
+            <div id="cv-list" class="grid-3"></div>
+        </div>
 
-/* ══ ATS ENGINE V2 ══ */
-function computeATSScoreV2(data){
-  const card=document.getElementById('ats-card');
-  card.style.display='block';
-  const jobText=((data.jobDesc||'')+' '+(data.jobTitle||'')+' '+(data.prioritySkills||[]).join(' ')).toLowerCase();
-  const cvText=(state.generatedHTML||'').replace(/<[^>]+>/g,' ').toLowerCase();
-  const stops=new Set(['dans','avec','pour','nous','vous','être','avoir','cette','tout','sont','plus','leur','elle','elles','notre','votre','aussi','bien','mais','comme','très','sous','sans','même','dont','donc','cela','celui','ceux','après','quand','puis','sera','ont','une','les','des','par','sur','qui','que','est','pas']);
-  const extractWords=text=>[...new Set((text.match(/[a-zàâäéèêëïîôùûüçœæ0-9\/\-]{3,}/gi)||[]).map(w=>w.toLowerCase()).filter(w=>!stops.has(w)))];
-  const jobWords=extractWords(jobText);
-  const isTech=w=>/^(python|java(?:script)?|react|node|sql|docker|aws|azure|gcp|git|linux|excel|power|tableau|machine|learning|cloud|api|agile|scrum|devops|kubernetes|typescript|angular|vue|php|ruby|scala|golang|swift|kotlin|tensor|pytorch|pandas|spark|hadoop|mongo|postgresql|redis|kafka|elastic|jenkins|terraform|ansible|html|css|c\+\+|\.net|sharepoint|salesforce|sap|jira|confluence)/.test(w);
-  const isSoft=w=>/^(communication|leadership|autonomie|rigueur|organisation|adaptabilité|créativité|initiative|gestion|analyse|synthèse|négociation|coordination|planification|pilotage|management|collaboration|polyvalence|proactivité|empathie)/.test(w);
-  const techKws=jobWords.filter(w=>isTech(w)).slice(0,15);
-  const softKws=jobWords.filter(w=>isSoft(w)).slice(0,10);
-  const domainKws=jobWords.filter(w=>!isTech(w)&&!isSoft(w)&&w.length>4).slice(0,12);
-  const cats=[
-    {name:'Compétences tech',words:techKws,color:'#3b6bdb'},
-    {name:'Soft skills',words:softKws,color:'#1a8a5a'},
-    {name:'Domaine métier',words:domainKws,color:'#c8972a'},
-  ];
-  let totalHit=0,totalWords=0;
-  const catResults=cats.map(cat=>{
-    const hit=cat.words.filter(w=>cvText.includes(w));
-    const miss=cat.words.filter(w=>!cvText.includes(w));
-    const pct=cat.words.length?Math.round(hit.length/cat.words.length*100):0;
-    totalHit+=hit.length;totalWords+=cat.words.length;
-    return{...cat,hit,miss,pct};
-  });
-  const globalScore=totalWords?Math.round(totalHit/totalWords*100):0;
-  animateGauge('ats-arc','ats-value',globalScore,globalScore>=70?'var(--success)':globalScore>=40?'var(--gold)':'var(--danger)');
-  let html='<div class="ats-cats">';
-  catResults.forEach(cat=>{
-    if(!cat.words.length)return;
-    html+=`<div class="ats-cat-row"><div class="ats-cat-label"><span>${cat.name}</span><span style="color:${cat.pct>=70?'var(--success)':cat.pct>=40?'var(--gold)':'var(--danger)'}">${cat.pct}%</span></div><div class="ats-track"><div class="ats-fill" style="width:0%;background:${cat.color}" data-target="${cat.pct}"></div></div><div class="kw-pill-wrap">${cat.hit.slice(0,6).map(w=>`<span class="kw-pill kw-hit">✓ ${w}</span>`).join('')}${cat.miss.slice(0,5).map(w=>`<span class="kw-pill kw-miss">✗ ${w}</span>`).join('')}</div></div>`;
-  });
-  html+='</div>';
-  const allMissing=catResults.flatMap(c=>c.miss).slice(0,6);
-  if(allMissing.length&&globalScore<85){
-    html+=`<div class="ats-boost-box"><div class="ats-boost-title">💡 Boostez votre score ATS</div>Ajoutez ces mots-clés : ${allMissing.map(w=>`<strong>${w}</strong>`).join(', ')}</div>`;
-  } else if(globalScore>=85){
-    html+=`<div class="ats-boost-box" style="border-color:var(--success);background:linear-gradient(135deg,#eaf7ee,var(--card))"><div class="ats-boost-title" style="color:var(--success)">🎯 Excellent matching ATS !</div>Votre CV correspond très bien à l'offre — prêt pour les filtres automatiques.</div>`;
-  }
-  document.getElementById('ats-details').innerHTML=html;
-  setTimeout(()=>{document.querySelectorAll('.ats-fill').forEach(el=>{el.style.width=el.dataset.target+'%'})},150);
-  return globalScore;
-}
+        <div id="view-step1" class="view">
+            <h2>Choisissez votre modèle</h2><br>
+            <div class="grid-3">
+                <div class="tpl-card selected" data-tpl="classic" onclick="selectTpl(this)">Classique Doré</div>
+                <div class="tpl-card" data-tpl="modern" onclick="selectTpl(this)">Moderne Bleu</div>
+                <div class="tpl-card" data-tpl="executive" onclick="selectTpl(this)">Executive Sombre</div>
+            </div>
+        </div>
 
-/* ══ COACHING CARRIÈRE ══ */
-function showCoachingTips(data,atsScore){
-  const card=document.getElementById('coaching-card');
-  if(!card)return;
-  card.style.display='block';
-  const tips=[];
-  const expCount=(data.experiences||[]).filter(e=>e.title).length;
-  if(expCount>=3)tips.push({type:'ok',icon:'🏆',text:`Excellent ! <strong>${expCount} expériences</strong> — votre parcours est bien documenté.`});
-  if((data.skillsTech||[]).length>=5)tips.push({type:'ok',icon:'✅',text:`<strong>${data.skillsTech.length} compétences techniques</strong> — profil riche et très recherché.`});
-  if((data.langues||[]).length>=2)tips.push({type:'ok',icon:'🌍',text:'Bilingue/multilingue — atout <strong>majeur</strong> sur le marché actuel.'});
-  if(!data.accroche||data.accroche.trim().length<50)tips.push({type:'warn',icon:'💡',text:'Ajoutez une <strong>accroche percutante</strong> (3-4 lignes). Les recruteurs la lisent en premier.'});
-  if(!data.linkedin)tips.push({type:'warn',icon:'🔗',text:'<strong>LinkedIn manquant</strong> — 87% des recruteurs vérifient votre profil. Ajoutez l\'URL.'});
-  if((data.experiences||[]).some(e=>!e.missions||e.missions.trim().length<30))tips.push({type:'warn',icon:'📝',text:'Certaines expériences manquent de <strong>missions détaillées</strong>. Utilisez des verbes d\'action : "Piloté", "Développé", "Optimisé".'});
-  if(atsScore!==null&&atsScore<50)tips.push({type:'boost',icon:'🎯',text:`Score ATS <strong>${atsScore}%</strong> — Intégrez les mots-clés en rouge pour passer les filtres automatiques.`});
-  else if(atsScore!==null&&atsScore>=70)tips.push({type:'ok',icon:'🤖',text:`Score ATS <strong>${atsScore}%</strong> — Excellent ! Votre CV passe la majorité des filtres RH automatiques.`});
-  if(expCount===1)tips.push({type:'boost',icon:'💼',text:'Ajoutez stages, freelance ou projets associatifs pour étoffer votre profil.'});
-  if(!(data.formations||[]).some(f=>f.degree))tips.push({type:'warn',icon:'🎓',text:'Aucune formation renseignée — même un titre court compte pour les ATS.'});
-  if(!data.projets)tips.push({type:'boost',icon:'🚀',text:'Une section <strong>Projets</strong> vous démarque, surtout face à des profils équivalents.'});
-  const sorted=[...tips.filter(t=>t.type==='warn'),...tips.filter(t=>t.type==='boost'),...tips.filter(t=>t.type==='ok')].slice(0,5);
-  document.getElementById('coaching-tips').innerHTML=sorted.map(t=>`<div class="coaching-tip ${t.type}"><span class="coaching-icon">${t.icon}</span><div>${t.text}</div></div>`).join('');
-}
+        <div id="view-step2" class="view">
+            <h2>Votre contenu</h2><br>
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-group"><label>Prénom</label><input type="text" id="q-prenom" oninput="autoSave()"></div>
+                    <div class="form-group"><label>Nom</label><input type="text" id="q-nom" oninput="autoSave()"></div>
+                </div>
+                <div class="form-group"><label>Titre</label><input type="text" id="q-titre" oninput="autoSave()"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Email</label><input type="email" id="q-email" oninput="autoSave()"></div>
+                    <div class="form-group"><label>Tél</label><input type="tel" id="q-tel" oninput="autoSave()"></div>
+                </div>
+                <h3>Expériences</h3>
+                <div id="exp-list"></div>
+                <button class="btn btn-secondary btn-sm" onclick="addExp()">+ Expérience</button>
+            </div>
+        </div>
 
-/* ══ COMPTEUR PAGES A4 ══ */
-function updatePageCounter(){
-  const badge=document.getElementById('page-counter-badge');
-  const area=document.getElementById('cv-preview-area');
-  if(!badge||!area||!state.generatedHTML)return;
-  const cvDiv=area.querySelector('div');
-  if(!cvDiv)return;
-  const A4H=1123;
-  const pages=Math.max(1,Math.ceil(cvDiv.scrollHeight/A4H));
-  badge.style.display='inline-flex';
-  badge.textContent='📄 '+pages+' page'+(pages>1?'s':'');
-  badge.style.background=pages>2?'rgba(192,57,43,.8)':pages===2?'rgba(200,151,42,.85)':'rgba(15,15,15,.7)';
-  badge.title=pages>2?'⚠️ CV trop long — max 2 pages recommandé':'';
-}
+        <div id="view-step3" class="view">
+            <h2>Poste ciblé</h2><br>
+            <div class="card">
+                <div class="form-group"><label>Intitulé du poste</label><input type="text" id="job-title"></div>
+                <div class="form-group"><label>Description de l'offre</label><textarea id="job-desc"></textarea></div>
+            </div>
+        </div>
 
-/* ══ VALIDATION INTELLIGENTE ══ */
-function setupValidation(){
-  setTimeout(()=>{
-    const emailEl=document.getElementById('q-email');
-    if(emailEl){
-      const h=makeHint(emailEl,'v-h-email');
-      emailEl.addEventListener('blur',()=>{
-        const v=emailEl.value.trim();
-        if(!v)return clearV(emailEl,h);
-        const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        setV(emailEl,h,ok,ok?'✓ Email valide':'✗ Format invalide (ex: nom@domaine.fr)');
-      });
-    }
-    const liEl=document.getElementById('q-linkedin');
-    if(liEl){
-      const h=makeHint(liEl,'v-h-li');
-      liEl.addEventListener('blur',()=>{
-        const v=liEl.value.trim();
-        if(!v)return clearV(liEl,h);
-        const ok=/linkedin\.com/i.test(v);
-        setV(liEl,h,ok,ok?'✓ Profil LinkedIn valide':'✗ Doit contenir linkedin.com');
-      });
-    }
-  },500);
-}
-function makeHint(input,id){
-  let h=document.getElementById(id);
-  if(!h){h=document.createElement('div');h.id=id;h.className='v-hint';input.parentNode.appendChild(h);}
-  return h;
-}
-function setV(input,hint,ok,msg){
-  input.classList.remove('v-ok','v-err');
-  hint.classList.remove('ok','err','show');
-  input.classList.add(ok?'v-ok':'v-err');
-  hint.classList.add(ok?'ok':'err','show');
-  hint.textContent=msg;
-}
-function clearV(input,hint){input.classList.remove('v-ok','v-err');hint.classList.remove('show')}
-</script>
+        <div id="view-step4" class="view">
+            <h2>Génération & Export</h2><br>
+            <button class="btn btn-primary" style="width:100%" onclick="generateCV()">✨ Générer le CV</button>
+            <div id="result-area" style="margin-top:2rem; display:none">
+                <div class="score-gauge">
+                    <svg width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="#eee" stroke-width="8"/><circle id="ats-arc" cx="60" cy="60" r="52" fill="none" stroke="var(--teal)" stroke-width="8" stroke-dasharray="0 327"/></svg>
+                    <div class="value"><span id="ats-value">0</span>%</div>
+                </div>
+                <div id="cv-preview" style="margin-top:2rem; padding:1rem; background:#fff; border:1px solid #ccc; min-height:400px"></div>
+                <div class="btn-group" style="margin-top:2rem">
+                    <button class="btn btn-primary" onclick="exportPDF()">📄 Télécharger PDF</button>
+                    <button class="btn btn-secondary" onclick="saveCV()">💾 Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="nav-footer" class="nav-footer" style="display:none">
+        <button id="btn-prev" class="btn btn-secondary" onclick="prevStep()">← Précédent</button>
+        <span id="step-label">Étape 1 / 4</span>
+        <button id="btn-next" class="btn btn-primary" onclick="nextStep()">Suivant →</button>
+    </footer>
+
+    <div id="gen-overlay">Génération en cours...</div>
+    <div id="toast-container"></div>
+
+    <script>
+        let state = { currentStep: 0, template: 'classic', cvs: [] };
+
+        // Fix Bug #4: Dark Mode Icon
+        function toggleTheme() {
+            const d = document.documentElement;
+            const isDark = d.getAttribute('data-theme') === 'dark';
+            d.setAttribute('data-theme', isDark ? '' : 'dark');
+            document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+            localStorage.setItem('cvcraft_theme', isDark ? '' : 'dark');
+        }
+
+        // Initialize theme
+        if(localStorage.getItem('cvcraft_theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('theme-btn').textContent = '☀️';
+        }
+
+        function showDashboard() {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-dashboard').classList.add('active');
+            document.getElementById('step-tabs').style.display = 'none';
+            document.getElementById('nav-footer').style.display = 'none';
+            state.currentStep = 0;
+            renderCVList();
+        }
+
+        function startNewCV() {
+            document.getElementById('step-tabs').style.display = 'flex';
+            document.getElementById('nav-footer').style.display = 'flex';
+            goStep(1);
+        }
+
+        // Fix Bug #3: Step Jump logic
+        function goStep(n) {
+            state.currentStep = n;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('view-step' + n).classList.add('active');
+            document.getElementById('tab-' + n).classList.add('active');
+            document.getElementById('step-label').textContent = 'Étape ' + n + ' / 4';
+            document.getElementById('btn-prev').disabled = n === 1;
+            document.getElementById('btn-next').textContent = n === 4 ? 'Dashboard' : 'Suivant →';
+        }
+
+        function nextStep() {
+            if(state.currentStep === 4) showDashboard();
+            else goStep(state.currentStep + 1);
+        }
+
+        function prevStep() {
+            if(state.currentStep === 1) showDashboard();
+            else goStep(state.currentStep - 1);
+        }
+
+        function selectTpl(card) {
+            document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            state.template = card.dataset.tpl;
+        }
+
+        function addExp() {
+            const div = document.createElement('div');
+            div.className = 'exp-item card';
+            div.style.marginBottom = '10px';
+            div.innerHTML = `
+                <input type="text" placeholder="Poste" class="e-title" style="margin-bottom:5px">
+                <textarea placeholder="Missions" class="e-missions"></textarea>
+            `;
+            document.getElementById('exp-list').appendChild(div);
+        }
+
+        async function generateCV() {
+            document.getElementById('gen-overlay').style.display = 'flex';
+            const data = collectData();
+            setTimeout(() => {
+                const html = buildHTML(data);
+                document.getElementById('cv-preview').innerHTML = html;
+                document.getElementById('result-area').style.display = 'block';
+                document.getElementById('gen-overlay').style.display = 'none';
+                
+                // Fix Bug #2: Stable ATS Score
+                const score = calculateATS(data);
+                document.getElementById('ats-value').textContent = score;
+                document.getElementById('ats-arc').setAttribute('stroke-dasharray', (score/100 * 327) + ' 327');
+                toast("✅ CV Généré");
+            }, 1000);
+        }
+
+        function buildHTML(d) {
+            const color = d.template === 'modern' ? '#3b6bdb' : '#c8972a';
+            // Fix Bug #6: Newline literals
+            const formatText = t => t.replace(/\n/g, '<br>');
+            return `
+                <div style="font-family:sans-serif; padding:20px; color:#333">
+                    <h1 style="color:${color}">${d.prenom} ${d.nom}</h1>
+                    <div style="font-weight:bold">${d.titre}</div>
+                    <div style="font-size:12px; margin-bottom:20px">${d.email} | ${d.tel}</div>
+                    <h3 style="border-bottom:1px solid ${color}">EXPÉRIENCES</h3>
+                    ${d.exp.map(e => `<div style="margin-bottom:10px"><b>${e.title}</b><br>${formatText(e.missions)}</div>`).join('')}
+                </div>
+            `;
+        }
+
+        function collectData() {
+            const exp = Array.from(document.querySelectorAll('.exp-item')).map(e => ({
+                title: e.querySelector('.e-title').value,
+                missions: e.querySelector('.e-missions').value
+            }));
+            return {
+                prenom: document.getElementById('q-prenom').value,
+                nom: document.getElementById('q-nom').value,
+                titre: document.getElementById('q-titre').value,
+                email: document.getElementById('q-email').value,
+                tel: document.getElementById('q-tel').value,
+                template: state.template,
+                exp: exp,
+                jobTitle: document.getElementById('job-title').value
+            };
+        }
+
+        function calculateATS(d) {
+            let s = 10;
+            if(d.prenom && d.nom) s += 20;
+            if(d.email && d.tel) s += 20;
+            if(d.jobTitle && d.titre.toLowerCase().includes(d.jobTitle.toLowerCase())) s += 30;
+            if(d.exp.length > 0) s += 20;
+            return s;
+        }
+
+        // Fix Bug #1: PDF Export using html2pdf
+        function exportPDF() {
+            const element = document.getElementById('cv-preview');
+            html2pdf().from(element).set({
+                margin: 10,
+                filename: (document.getElementById('q-nom').value || 'CV') + '.pdf',
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function saveCV() {
+            const cvs = JSON.parse(localStorage.getItem('cvcraft_cvs') || '[]');
+            const name = document.getElementById('q-prenom').value + " " + document.getElementById('q-nom').value;
+            cvs.push({ name: name.trim() || 'Sans nom', template: state.template, date: Date.now() });
+            localStorage.setItem('cvcraft_cvs', JSON.stringify(cvs));
+            toast("💾 Sauvegardé");
+        }
+
+        function renderCVList() {
+            const cvs = JSON.parse(localStorage.getItem('cvcraft_cvs') || '[]');
+            document.getElementById('cv-list').innerHTML = cvs.map(c => `
+                <div class="card">
+                    <h4>${c.name}</h4>
+                    <p style="font-size:12px">${c.template} · ${new Date(c.date).toLocaleDateString()}</p>
+                </div>
+            `).join('');
+        }
+
+        // Fix Bug #8: Auto-save
+        function autoSave() {
+            localStorage.setItem('cvcraft_draft', JSON.stringify(collectData()));
+        }
+
+        function toast(m) {
+            const t = document.createElement('div');
+            t.className = 'toast'; t.textContent = m;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 2000);
+        }
+
+        renderCVList();
+    </script>
 </body>
 </html>
