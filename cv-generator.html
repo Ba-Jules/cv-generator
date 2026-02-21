@@ -53,141 +53,126 @@
 <body data-theme="light">
     <header>
         <div class="logo">CV<span>Craft</span> Pro</div>
-        <div style="display:flex; gap: 1rem;">
-            <button class="btn btn-outline" onclick="toggleTheme()" id="theme-btn">🌙</button>
-        </div>
+        <div style="display:flex; gap: 1rem;"><button class="btn btn-outline" onclick="toggleTheme()" id="theme-btn">🌙</button></div>
     </header>
 
     <div class="container">
-        <!-- Step 1: Configuration -->
+        <!-- Step 1 -->
         <div id="step-1" class="step active card">
             <h2>Configuration</h2>
-            <div class="input-group">
-                <label>Clé API OpenAI</label>
-                <input type="password" id="api-key" placeholder="sk-..." onchange="saveLocal('api_key', this.value)">
-            </div>
-            <button class="btn btn-primary" onclick="goStep(2)">Continuer <i data-lucide="arrow-right"></i></button>
+            <div class="input-group"><label>Clé API OpenAI</label><input type="password" id="api-key" placeholder="sk-..." onchange="saveLocal('api_key', this.value)"></div>
+            <button class="btn btn-primary" onclick="goStep(2)">Continuer <i data-lucide=\"arrow-right\"></i></button>
         </div>
 
-        <!-- Step 2: Import & Data -->
+        <!-- Step 2 -->
         <div id="step-2" class="step card">
             <h2>Vos Informations</h2>
-            <div style="display:flex; gap: 1rem; margin-bottom: 2rem;">
-                <button class="btn btn-outline" onclick="triggerImport()"><i data-lucide="upload"></i> Importer un CV (Simulation)</button>
-                <input type="file" id="file-input" style="display:none" onchange="handleFile(this)">
+            <div style=\"display:flex; gap: 1rem; margin-bottom: 2rem;\">
+                <button class=\"btn btn-outline\" onclick=\"triggerImport()\">Importer Simulation</button>
+                <input type=\"file\" id=\"file-input\" style=\"display:none\" onchange=\"handleFile(this)\">
             </div>
-            <div class="grid-2">
-                <div class="input-group"><label>Prénom</label><input type="text" id="fn" placeholder="Prénom"></div>
-                <div class="input-group"><label>Nom</label><input type="text" id="ln" placeholder="Nom"></div>
+            <div class=\"grid-2\">
+                <div class=\"input-group\"><label>Prénom</label><input type=\"text\" id=\"fn\" placeholder=\"Prénom\"></div>
+                <div class=\"input-group\"><label>Nom</label><input type=\"text\" id=\"ln\" placeholder=\"Nom\"></div>
             </div>
-            <div class="input-group"><label>Titre</label><input type="text" id="title" placeholder="Titre"></div>
-            <div class="grid-2">
-                <div class="input-group"><label>Email</label><input type="email" id="email" placeholder="Email"></div>
-                <div class="input-group"><label>Téléphone</label><input type="tel" id="tel" placeholder="Tel"></div>
+            <div class=\"input-group\"><label>Titre</label><input type=\"text\" id=\"title\" placeholder=\"Titre\"></div>
+            <div class=\"grid-2\">
+                <div class=\"input-group\"><label>Email</label><input type=\"email\" id=\"email\" placeholder=\"Email\"></div>
+                <div class=\"input-group\"><label>Tel</label><input type=\"tel\" id=\"tel\" placeholder=\"Tel\"></div>
             </div>
-            <div style="margin-top: 2rem;">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style=\"margin-top: 2rem;\">
+                <div style=\"display:flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;\">
                     <h3>Expériences</h3>
-                    <button class="btn btn-outline" onclick="addExp()"><i data-lucide="plus"></i> Ajouter</button>
+                    <button class=\"btn btn-outline\" onclick=\"addExp()\">Ajouter</button>
                 </div>
-                <div id="exp-container"></div>
+                <div id=\"exp-container\"></div>
             </div>
-            <div style="margin-top: 2rem; display:flex; gap: 1rem;">
-                <button class="btn btn-outline" onclick="goStep(1)">Retour</button>
-                <button class="btn btn-primary" onclick="goStep(3)">Prévisualiser <i data-lucide="eye"></i></button>
+            <div style=\"margin-top: 2rem; display:flex; gap: 1rem;\">
+                <button class=\"btn btn-outline\" onclick=\"goStep(1)\">Retour</button>
+                <button class=\"btn btn-primary\" onclick=\"goStep(3)\">Aperçu</button>
             </div>
         </div>
 
-        <!-- Step 3: Preview -->
-        <div id="step-3" class="step card">
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <!-- Step 3 -->
+        <div id=\"step-3\" class=\"step card\">
+            <div style=\"display:flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;\">
                 <h2>Aperçu Final</h2>
-                <div style="display:flex; gap: 1rem;">
-                    <select id="tpl-select" onchange="renderPreview()"><option value="modern">Modern</option><option value="clean">Clean</option></select>
-                    <button class="btn btn-primary" onclick="downloadPDF()"><i data-lucide="download"></i> Télécharger</button>
+                <div style=\"display:flex; gap: 1rem;\">
+                    <select id=\"tpl-select\" onchange=\"renderPreview()\"><option value=\"modern\">Modern</option><option value=\"clean\">Clean</option></select>
+                    <button class=\"btn btn-primary\" onclick=\"downloadPDF()\">Télécharger</button>
                 </div>
             </div>
-            <div class="preview-container"><div id="preview-paper" class="preview-paper"></div></div>
-            <div style="margin-top: 2rem;"><button class="btn btn-outline" onclick="goStep(2)">Modifier</button></div>
+            <div class=\"preview-container\"><div id=\"preview-paper\" class=\"preview-paper\"></div></div>
+            <div style=\"margin-top: 2rem;\"><button class=\"btn btn-outline\" onclick=\"goStep(2)\">Modifier</button></div>
         </div>
     </div>
 
-    <div id="toast-container"></div>
-    <div id="loading-overlay" class="loading-overlay"><div class="spinner"></div><p id="loading-text">Analyse...</p></div>
+    <div id=\"toast-container\"></div>
+    <div id=\"loading-overlay\" class=\"loading-overlay\"><div class=\"spinner\"></div><p id=\"loading-text\">Chargement...</p></div>
 
     <script>
-        try { lucide.createIcons(); } catch(e) {}
-        const state = { step: 1 };
-
+        const state = { count: 0 };
         function goStep(n) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById('step-' + n);
-            if(target) target.classList.add('active');
-            if(n === 3) try { renderPreview(); } catch(e) { toast("Erreur aperçu: " + e.message); }
+            const t = document.getElementById('step-' + n);
+            if(t) t.classList.add('active');
+            if(n === 3) renderPreview();
             window.scrollTo(0,0);
         }
 
         function addExp(data = { title: '', company: '', period: '', desc: '' }) {
-            const id = Date.now();
+            state.count++;
+            const id = state.count;
             const div = document.createElement('div');
             div.className = 'exp-row';
             div.id = 'exp-' + id;
-            div.innerHTML = '<i data-lucide=\"trash-2\" class=\"btn-remove\" onclick=\"document.getElementById(\'exp-' + id + '\').remove()\"></i>' +
-                '<div class=\"grid-2\"><input type=\"text\" class=\"e-title\" value=\"' + data.title + '\" placeholder=\"Poste\"><input type=\"text\" class=\"e-company\" value=\"' + data.company + '\" placeholder=\"Ent.\"></div>' +
-                '<input type=\"text\" class=\"e-period\" value=\"' + data.period + '\" placeholder=\"Dates\" style=\"margin: 5px 0\">' +
-                '<textarea class=\"e-desc\" placeholder=\"Description\">' + data.desc + '</textarea>';
+            div.innerHTML = '<div class=\"grid-2\"><input type=\"text\" class=\"e-title\" value=\"' + data.title + '\" placeholder=\"Titre\"><input type=\"text\" class=\"e-company\" value=\"' + data.company + '\" placeholder=\"Entreprise\"></div>' +
+                '<input type=\"text\" class=\"e-period\" value=\"' + data.period + '\" placeholder=\"Période\" style=\"margin:5px 0\">' +
+                '<textarea class=\"e-desc\" placeholder=\"Description\">' + data.desc + '</textarea>' +
+                '<button onclick=\"document.getElementById(\'exp-' + id + '\').remove()\" style=\"color:red; background:none; border:none; cursor:pointer\">Supprimer</button>';
             document.getElementById('exp-container').appendChild(div);
-            try { if(window.lucide) lucide.createIcons(); } catch(e) {}
         }
 
         function triggerImport() { document.getElementById('file-input').click(); }
-
         function handleFile(input) {
-            if(!input.files[0]) return;
-            showLoading("Extraction...");
+            showLoading(\"Extraction...\");
             setTimeout(() => {
-                const f = (id) => document.getElementById(id);
-                f('fn').value = "Amadou"; f('ln').value = "DIALLO";
-                f('title').value = "Chef de Projet IT"; f('email').value = "a.diallo@email.com";
-                f('exp-container').innerHTML = '';
-                addExp({title: 'Directeur Tech', company: 'Global Solutions', period: '2021-Present', desc: 'Gestion de 50 personnes.'});
-                addExp({title: 'Ingénieur DevOps', company: 'Cloudy', period: '2019-2021', desc: 'Architecture AWS.'});
+                document.getElementById('fn').value = \"Amadou\";
+                document.getElementById('ln').value = \"DIALLO\";
+                document.getElementById('title').value = \"Chef de Projet IT\";
+                document.getElementById('email').value = \"a.diallo@email.com\";
+                document.getElementById('exp-container').innerHTML = '';
+                addExp({title: 'IT Manager', company: 'Tech Corp', period: '2022-2025', desc: 'Gestion équipe.'});
                 hideLoading();
-                toast("✨ Importé !");
-            }, 1000);
+                toast(\"✨ Importé\");
+            }, 500);
         }
 
         function renderPreview() {
-            const paper = document.getElementById('preview-paper');
-            if(!paper) return;
-            const tpl = document.getElementById('tpl-select').value;
-            const col = tpl === 'clean' ? '#1a6b6b' : '#c8972a';
-            const f = (id) => document.getElementById(id).value;
+            const p = document.getElementById('preview-paper');
+            const v = (id) => document.getElementById(id) ? document.getElementById(id).value : '';
+            const col = document.getElementById('tpl-select').value === 'clean' ? '#1a6b6b' : '#c8972a';
             
-            let html = '<div style=\"padding:40px; font-family:sans-serif;\">' +
-                '<div style=\"border-bottom:5px solid ' + col + '; padding-bottom:15px; margin-bottom:20px;\">' +
-                '<h1 style=\"margin:0; text-transform:uppercase;\">' + f('fn') + ' ' + f('ln') + '</h1>' +
-                '<h2 style=\"color:' + col + '; margin:5px 0;\">' + f('title') + '</h2>' +
-                '<div style=\"font-size:12px; color:#666;\">' + f('email') + ' | ' + f('tel') + '</div></div>' +
-                '<h3>Expériences</h3>';
-            
+            let exps = '';
             Array.from(document.querySelectorAll('.exp-row')).forEach(r => {
-                html += '<div style=\"margin-bottom:15px;\">' +
-                    '<strong>' + r.querySelector('.e-title').value + '</strong> - ' + r.querySelector('.e-period').value + '<br>' +
-                    '<em style=\"color:' + col + ';\">' + r.querySelector('.e-company').value + '</em>' +
-                    '<p style=\"font-size:13px; margin-top:5px;\">' + r.querySelector('.e-desc').value.replace(/\n/g, '<br>') + '</p></div>';
+                exps += '<div style=\"margin-bottom:15px;\">' +
+                    '<strong>' + r.querySelector('.e-title').value + '</strong> (' + r.querySelector('.e-period').value + ')<br>' +
+                    '<span style=\"color:' + col + '\">' + r.querySelector('.e-company').value + '</span>' +
+                    '<p style=\"font-size:13px\">' + r.querySelector('.e-desc').value + '</p></div>';
             });
-            html += '</div>';
-            paper.innerHTML = html;
+
+            p.innerHTML = '<div style=\"padding:40px;\">' +
+                '<h1 style=\"color:' + col + '\">' + v('fn') + ' ' + v('ln') + '</h1>' +
+                '<h3>' + v('title') + '</h3>' +
+                '<p>' + v('email') + ' | ' + v('tel') + '</p>' +
+                '<hr style=\"margin:20px 0; border:0; border-top:1px solid #ccc\">' +
+                '<h4>Expériences</h4>' + exps + '</div>';
         }
 
         async function downloadPDF() {
-            toast("Génération...");
-            try {
-                const opt = { margin:0, filename:'CV.pdf', jsPDF:{unit:'mm', format:'a4'} };
-                await html2pdf().set(opt).from(document.getElementById('preview-paper')).save();
-                toast("✅ Succès");
-            } catch(e) { toast("❌ Erreur PDF"); }
+            toast(\"PDF...\");
+            const opt = { margin:10, filename:'CV.pdf', image:{type:'jpeg', quality:0.98} };
+            html2pdf().set(opt).from(document.getElementById('preview-paper')).save();
         }
 
         function showLoading(t) { document.getElementById('loading-text').textContent = t; document.getElementById('loading-overlay').style.display = 'flex'; }
@@ -195,16 +180,15 @@
         function toast(m) {
             const c = document.getElementById('toast-container');
             const t = document.createElement('div'); t.className = 'toast'; t.textContent = m;
-            c.appendChild(t); setTimeout(() => t.remove(), 3000);
+            c.appendChild(t); setTimeout(() => t.remove(), 2000);
         }
         function toggleTheme() {
             const b = document.body;
-            const d = b.getAttribute('data-theme') === 'dark';
-            b.setAttribute('data-theme', d ? 'light' : 'dark');
-            document.getElementById('theme-btn').textContent = d ? '🌙' : '☀️';
+            const isD = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isD ? 'light' : 'dark');
         }
         function saveLocal(k, v) { localStorage.setItem('cvcraft_' + k, v); }
-        window.onload = () => { addExp(); };
+        window.onload = () => { if(window.lucide) lucide.createIcons(); addExp(); };
     </script>
 </body>
 </html>
